@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-11-20 (c): code quality and efficiency review
+
+Bugs:
+- `ci.py`: `find_run` matched runs by title only. Labels get reused, so re-dispatching the same ref
+  and label could report the previous run's id, and the `mpc` path took whatever run was newest.
+  Runs must now be created after the dispatch (minus a 15 s clock-skew margin).
+- Line endings: two tracked files (`config/rules-snapshot.json`, `scripts/pr_lint.py`) had CRLF.
+  `rules_drift.py --update` now writes LF, `.gitattributes` forces `eol=lf`, and
+  `tests/test_repo_hygiene.py` fails on any CRLF file.
+
+Quality and efficiency:
+- `census.py` builds the upstream-to-key index once instead of scanning per PR.
+- `ci.py grep` strips ANSI codes once per line, and the "not listed yet" message names the
+  configured CI repo instead of a hard-coded one.
+- `signed_check.py main` takes an injectable `gh` (now tested end to end), and computes its commit
+  lookup once.
+- `pr_lint.py`: a named `COMMIT_SUBJECT_MAX` constant and no redundant list copy. The `Gh`
+  docstring now describes `guard()` correctly.
+- 79 tests. Each fix is covered by a mutant that the suite catches.
+- Repos: added `near-token-rs` and `near-gas-rs` (`NearToken` and `Gas` live there).
+
 ## 2026-11-20 (b): discovery lane, public edition
 
 - **Discovery lane.** Agents now look for new, unreported problems as well as picking up filed

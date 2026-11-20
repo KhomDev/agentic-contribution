@@ -91,6 +91,17 @@ class SignedCheck(unittest.TestCase):
         self.assertEqual(info["repo"], "x402-foundation/x402")
         self.assertTrue(info["verified"])
 
+    def test_main_with_pr_reports_bad_commit(self):
+        fake = (FakeGh()
+                .add(("gh", "api", "rate_limit"), quota(4000))
+                .add(("gh", "pr", "view"), {"commits": [{"oid": "a1"}, {"oid": "b2"}]})
+                .add(("gh", "api", "repos/near/mpc/commits/a1"), commit_payload("a1"))
+                .add(("gh", "api", "repos/near/mpc/commits/b2"), commit_payload("b2", verified=False, reason="unsigned")))
+        with redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(signed_check.main(["--repo", "mpc", "--pr", "5260"], gh=Gh(runner=fake)), 1)
+        self.assertIn("BAD b2", out.getvalue())
+        self.assertNotIn("repos/KhomDev/mpc", " ".join(" ".join(c) for c in fake.calls))
+
     def test_pr_commits(self):
         fake = FakeGh().add(("gh", "pr", "view"), {"commits": [{"oid": "a1"}, {"oid": "b2"}]})
         self.assertEqual(signed_check.pr_commits(Gh(runner=fake), "near/mpc", 5260), ["a1", "b2"])
@@ -124,8 +135,8 @@ class Ci(unittest.TestCase):
         self.assertFalse(any(c[1:3] == ["workflow", "run"] for c in fake.calls))
 
     def test_dispatch_finds_run_by_title(self):
-        runs = [{"databaseId": 2, "displayTitle": "KhomDev/x402@other: l", "createdAt": "", "status": "queued", "url": "u2"},
-                {"databaseId": 1, "displayTitle": "KhomDev/x402@r: l", "createdAt": "", "status": "queued", "url": "u1"}]
+        runs = [{"databaseId": 2, "displayTitle": "KhomDev/x402@other: l", "createdAt": "2999-01-01T00:00:00Z", "status": "queued", "url": "u2"},
+                {"databaseId": 1, "displayTitle": "KhomDev/x402@r: l", "createdAt": "2999-01-01T00:00:00Z", "status": "queued", "url": "u1"}]
         fake = (FakeGh().add(("gh", "api", "rate_limit"), quota(4000))
                 .add(("gh", "workflow", "run"), "")
                 .add(("gh", "run", "list"), runs))
@@ -134,6 +145,17 @@ class Ci(unittest.TestCase):
             ci.main(["dispatch", "--target", "KhomDev/x402", "--ref", "r", "--toolchain", "node",
                      "--command", "c", "--label", "l"], gh=Gh(runner=fake, min_quota=300))
         self.assertIn("run 1 u1", out.getvalue())
+
+    def test_find_run_ignores_older_run_with_same_title(self):
+        title = "KhomDev/x402@r: l"
+        runs = [{"databaseId": 1, "displayTitle": title, "createdAt": "2026-11-20T10:00:00Z", "status": "completed", "url": "u1"}]
+        gh = Gh(runner=FakeGh().add(("gh", "run", "list"), runs))
+        self.assertIsNone(ci.find_run(gh, "KhomDev/oss-ci", "fork-branch-verify.yml", title,
+                                      since="2026-11-20T12:00:00Z", tries=1))
+        runs.insert(0, {"databaseId": 2, "displayTitle": title, "createdAt": "2026-11-20T12:00:05Z", "status": "queued", "url": "u2"})
+        gh = Gh(runner=FakeGh().add(("gh", "run", "list"), runs))
+        self.assertEqual(ci.find_run(gh, "KhomDev/oss-ci", "fork-branch-verify.yml", title,
+                                     since="2026-11-20T12:00:00Z", tries=1)["databaseId"], 2)
 
     def test_grep_on_running_job_is_friendly(self):
         import subprocess
@@ -177,6 +199,7 @@ class Drift(unittest.TestCase):
                 self.assertIn("CHANGED  near/docs:CONTRIBUTING.md", out.getvalue())
                 self.assertEqual(rules_drift.main(["--repo", "docs", "--update"], gh=Gh(runner=fake)), 0)
                 self.assertEqual(rules_drift.main(["--repo", "docs"], gh=Gh(runner=fake)), 0)
+            self.assertNotIn(b"\r\n", snap.read_bytes(), "snapshot must be written with LF endings")
             stored = json.loads(snap.read_text(encoding="utf-8"))
             self.assertEqual(stored["files"]["near/docs:CONTRIBUTING.md"], rules_drift.digest("new content"))
 

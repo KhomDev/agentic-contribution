@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _common import Gh, load_config, repo_by_upstream  # noqa: E402
+from _common import Gh, load_config  # noqa: E402
 
 FIELDS = "repository,number,title,isDraft,url,updatedAt"
 
@@ -33,9 +33,10 @@ def tally(prs: list[dict], config: dict) -> dict:
         key: {"repo": key, "upstream": r["upstream"], "budget": r["budget"], "open": 0, "prs": []}
         for key, r in config["repos"].items()
     }
+    by_upstream = {r["upstream"].lower(): key for key, r in config["repos"].items()}
     untracked: list[dict] = []
     for pr in prs:
-        key = repo_by_upstream(config, pr["repository"]["nameWithOwner"])
+        key = by_upstream.get(pr["repository"]["nameWithOwner"].lower())
         if key is None:
             untracked.append(pr)
             continue

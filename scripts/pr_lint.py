@@ -27,6 +27,7 @@ DISCLOSURE = re.compile(
     r"|\b(assist\w*|generat\w*|written|wrote|draft\w*|authored|prepared|used|using)\b[^\n]{0,120}\b(ai|claude|llm)\b)"
 )
 PROSE_NOISE = re.compile(r"(?im)^\s*([-*+]\s|#{1,6}\s|\d+\.\s)|\b(tested with|validated with)\b")
+COMMIT_SUBJECT_MAX = 72  # git convention; every repo in the program uses it
 ISSUE_REF = re.compile(r"(#\d+|github\.com/[\w.-]+/[\w.-]+/issues/\d+)")
 
 
@@ -73,7 +74,7 @@ def lint_body(body: str, repo: dict, config: dict, comment: bool = False) -> lis
     footer = config["footer"]
     if not body.strip():
         return [Finding("error", "body", "empty body")]
-    lines = [ln for ln in body.strip().splitlines()]
+    lines = body.strip().splitlines()
     if footer not in body:
         out.append(Finding("error", "body", f"missing attribution footer: {footer}"))
     elif lines[-1].strip() != footer:
@@ -109,8 +110,8 @@ def lint_commit(message: str, repo: dict, config: dict, where: str) -> list[Find
     subject = lines[0]
     if not re.match(repo["title"]["regex"], subject):
         out.append(Finding(repo["commit_subject_enforcement"], where, "subject does not follow the repo's conventional format"))
-    if len(subject) > 72:
-        out.append(Finding("error", where, f"subject is {len(subject)} chars, limit 72"))
+    if len(subject) > COMMIT_SUBJECT_MAX:
+        out.append(Finding("error", where, f"subject is {len(subject)} chars, limit {COMMIT_SUBJECT_MAX}"))
     if len(lines) > 1 and lines[1].strip():
         out.append(Finding("error", where, "second line must be blank"))
     limit = repo.get("commit_body_max_line")

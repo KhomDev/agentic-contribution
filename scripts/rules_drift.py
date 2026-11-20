@@ -85,7 +85,7 @@ def main(argv: list[str] | None = None, gh: Gh | None = None) -> int:
     if args.update:
         stored["files"].update({k: v for k, v in current.items() if v is not None})
         stored["checked"] = dt.date.today().isoformat()
-        SNAPSHOT.write_text(json.dumps(stored, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        SNAPSHOT.write_text(json.dumps(stored, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
         print(f"snapshot written: {SNAPSHOT}")
         return 0
     return 1 if changes else 0

@@ -15,6 +15,7 @@ several of them in parallel drained the shared 5000/hour REST quota on
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import re
 import sys
 import time
@@ -47,13 +48,27 @@ def mpc_args(ci_repo: str, a: argparse.Namespace) -> list[str]:
     return args
 
 
-def find_run(gh: Gh, ci_repo: str, workflow: str, title: str | None, tries: int = 5, delay: float = 4.0) -> dict | None:
-    """Find the newest run of `workflow`, matching `title` when the workflow sets run-name."""
+CLOCK_SKEW = dt.timedelta(seconds=15)
+
+
+def utc_now() -> str:
+    """UTC timestamp (minus a small clock-skew margin) in GitHub's `createdAt` format."""
+    return (dt.datetime.now(dt.timezone.utc) - CLOCK_SKEW).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def find_run(gh: Gh, ci_repo: str, workflow: str, title: str | None, since: str,
+             tries: int = 5, delay: float = 4.0) -> dict | None:
+    """Find the run of `workflow` created at or after `since` (a UTC ISO timestamp).
+
+    `since` matters: labels are reused (e.g. "ws-red"), so matching on the title
+    alone can return the previous run with the same title before the new one is
+    listed. `title` narrows further when the workflow sets run-name.
+    """
     for attempt in range(tries):
         runs = gh.json("run", "list", "-R", ci_repo, "--workflow", workflow, "--limit", "10",
                        "--json", "databaseId,displayTitle,createdAt,status,url") or []
         for run in runs:
-            if title is None or run["displayTitle"] == title:
+            if run["createdAt"] >= since and (title is None or run["displayTitle"] == title):
                 return run
         if attempt < tries - 1:
             time.sleep(delay)
@@ -62,20 +77,22 @@ def find_run(gh: Gh, ci_repo: str, workflow: str, title: str | None, tries: int 
 
 def cmd_dispatch(gh: Gh, ci_repo: str, a: argparse.Namespace) -> int:
     gh.guard()
+    since = utc_now()
     gh.run(*dispatch_args(ci_repo, a))
-    run = find_run(gh, ci_repo, "fork-branch-verify.yml", f"{a.target}@{a.ref}: {a.label}")
-    return _report(run)
+    run = find_run(gh, ci_repo, "fork-branch-verify.yml", f"{a.target}@{a.ref}: {a.label}", since)
+    return _report(run, ci_repo)
 
 
 def cmd_mpc(gh: Gh, ci_repo: str, a: argparse.Namespace) -> int:
     gh.guard()
+    since = utc_now()
     gh.run(*mpc_args(ci_repo, a))
-    return _report(find_run(gh, ci_repo, "mpc-branch-verify.yml", None))
+    return _report(find_run(gh, ci_repo, "mpc-branch-verify.yml", None, since), ci_repo)
 
 
-def _report(run: dict | None) -> int:
+def _report(run: dict | None, ci_repo: str) -> int:
     if run is None:
-        print("dispatched, but the run did not appear yet; list it later with: gh run list -R KhomDev/oss-ci --limit 5")
+        print(f"dispatched, but the run did not appear yet; list it later with: gh run list -R {ci_repo} --limit 5")
         return 0
     print(f"run {run['databaseId']} {run['url']}")
     print("check it with `ci.py status <id>` no sooner than 5 minutes from now")
@@ -91,7 +108,7 @@ def cmd_status(gh: Gh, ci_repo: str, a: argparse.Namespace) -> int:
 def cmd_grep(gh: Gh, ci_repo: str, a: argparse.Namespace) -> int:
     log = gh.run("run", "view", str(a.run_id), "-R", ci_repo, "--log")
     pattern = re.compile(a.pattern)
-    hits = [ANSI.sub("", ln) for ln in log.splitlines() if pattern.search(ANSI.sub("", ln))]
+    hits = [ln for ln in (ANSI.sub("", raw) for raw in log.splitlines()) if pattern.search(ln)]
     for ln in hits[: a.max]:
         print(ln)
     print(f"{len(hits)} matching line(s)")

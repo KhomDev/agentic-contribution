@@ -57,7 +57,7 @@ def problems(info: dict) -> list[str]:
     return out
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, gh: Gh | None = None) -> int:
     config = load_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--repo", required=True, choices=sorted(config["repos"]))
@@ -67,12 +67,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     repo = config["repos"][args.repo]
-    gh = Gh(min_quota=config["min_rest_quota"])
+    gh = gh or Gh(min_quota=config["min_rest_quota"])
     gh.guard()
-    shas = pr_commits(gh, repo["upstream"], args.pr) if args.pr else args.sha
-    lookup = [r for r in (repo["fork"], repo["upstream"]) if r]
     if args.pr:
-        lookup = [repo["upstream"]]
+        shas, lookup = pr_commits(gh, repo["upstream"], args.pr), [repo["upstream"]]
+    else:
+        shas, lookup = args.sha, [r for r in (repo["fork"], repo["upstream"]) if r]
 
     bad = 0
     for sha in shas:

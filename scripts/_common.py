@@ -92,9 +92,10 @@ class QuotaTooLow(RuntimeError):
 class Gh:
     """Thin wrapper over the `gh` CLI.
 
-    `min_quota` guards every call that the caller marks as `guarded`: the
-    REST quota is shared by every session and agent on this account, and an
-    exhausted quota blocks all review work for up to an hour.
+    Call `guard()` before a batch of REST calls: it refuses to proceed when the
+    remaining quota is below `min_quota`. The quota is shared by every session
+    and agent on this account, and an exhausted quota blocks all review work for
+    up to an hour.
     """
 
     def __init__(self, runner: Runner | None = None, min_quota: int = 300):
