@@ -134,7 +134,12 @@ def lint(repo_key: str, title: str | None, body: str | None, commits: list[str],
     repo = config["repos"][repo_key]
     findings: list[Finding] = []
     if title is not None:
-        findings += lint_title(title, repo)
+        if comment:
+            # An issue title is plain prose: no PR title format, only a sanity limit.
+            if len(title) > 120:
+                findings.append(Finding("warn", "title", f"{len(title)} chars; keep issue titles under 120"))
+        else:
+            findings += lint_title(title, repo)
         _scan_terms(title, "title", config["public_text"], findings)
     if body is not None:
         findings += lint_body(body, repo, config, comment=comment)

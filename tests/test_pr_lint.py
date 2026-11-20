@@ -133,6 +133,12 @@ class Bodies(unittest.TestCase):
         self.assertTrue(errors(pr_lint.lint_body(body("Fixed; the haiku agent checked it."), repo, CONFIG, comment=True)))
         self.assertTrue(errors(pr_lint.lint_body("Fixed in abc.", repo, CONFIG, comment=True)))
 
+    def test_issue_title_skips_pr_format_but_not_leaks(self):
+        title = "createAccount treats any name ending in the parent's account ID as a sub-account"
+        self.assertEqual(errors(pr_lint.lint("near-api-js", title, None, [], CONFIG, comment=True)), [])
+        self.assertTrue(errors(pr_lint.lint("near-api-js", title, None, [], CONFIG)))
+        self.assertTrue(errors(pr_lint.lint("near-api-js", "Bug found for jdoe", None, [], CONFIG, comment=True)))
+
     def test_mcp_comments_need_disclosure(self):
         repo = CONFIG["repos"]["rust-sdk"]
         self.assertTrue(errors(pr_lint.lint_body(body("Fixed in abc."), repo, CONFIG, comment=True)))
