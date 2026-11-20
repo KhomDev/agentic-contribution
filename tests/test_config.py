@@ -17,8 +17,8 @@ class ConfigShape(unittest.TestCase):
     def setUpClass(cls):
         cls.config = load_config(local=EXAMPLE_LOCAL_PATH)
 
-    def test_thirteen_repos(self):
-        self.assertEqual(len(self.config["repos"]), 13)
+    def test_fifteen_repos(self):
+        self.assertEqual(len(self.config["repos"]), 15)
 
     def test_every_repo_has_required_fields(self):
         for key, repo in self.config["repos"].items():

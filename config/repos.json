@@ -544,6 +544,82 @@
       },
       "body_sections": [],
       "oss_dir": "near-sdk-rs"
+    },
+    "near-token": {
+      "upstream": "near/near-token-rs",
+      "fork": "KhomDev/near-token-rs",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none (release-plz writes CHANGELOG.md from commits)",
+      "sources": [
+        "README.md",
+        ".github/workflows/ci.yml"
+      ],
+      "card": "repos/near-token-rs.md",
+      "examples": {
+        "good": [
+          "fix: reject '+' sign in token amount parsing (silently mis-parsed)",
+          "ci: trusted publishing to crates.io via release-plz + OIDC"
+        ],
+        "bad": [
+          "Reject plus sign",
+          "fix reject plus"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near-sdk-rs"
+    },
+    "near-gas": {
+      "upstream": "near/near-gas-rs",
+      "fork": "KhomDev/near-gas-rs",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none (release-plz writes CHANGELOG.md from commits)",
+      "sources": [
+        "README.md",
+        ".github/workflows/ci.yml"
+      ],
+      "card": "repos/near-gas-rs.md",
+      "examples": {
+        "good": [
+          "fix: reject '+' sign in gas amount parsing (silently mis-parsed)",
+          "feat: add 1PGas constant and parsing from str for PGas"
+        ],
+        "bad": [
+          "Add PGas constant",
+          "feature: arbitrary"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near-sdk-rs"
     }
   }
 }

@@ -1,6 +1,6 @@
 ---
 name: oss-contrib
-description: Run KhomDev's open-source contribution program across 13 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
+description: Run KhomDev's open-source contribution program across 15 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs, near-token-rs, near-gas-rs). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
 ---
 
 # OSS contribution program
@@ -116,7 +116,8 @@ orchestrator notes such as template, draft-first, CLA, CI command and lessons le
 | nearcore | [repos/nearcore.md](repos/nearcore.md) | cargo-near | [repos/cargo-near.md](repos/cargo-near.md) |
 | docs | [repos/docs.md](repos/docs.md) | near-sdk-rs | [repos/near-sdk-rs.md](repos/near-sdk-rs.md) |
 | outlayer | [repos/outlayer.md](repos/outlayer.md) | openzeppelin | [repos/openzeppelin.md](repos/openzeppelin.md) |
-| near-api-js | [repos/near-api-js.md](repos/near-api-js.md) | | |
+| near-api-js | [repos/near-api-js.md](repos/near-api-js.md) | near-token | [repos/near-token-rs.md](repos/near-token-rs.md) |
+| near-gas | [repos/near-gas-rs.md](repos/near-gas-rs.md) | | |
 
 ## Scripts
 
