@@ -25,7 +25,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _common import Gh, GhError, load_config  # noqa: E402
 
 TOOLCHAINS = ("rust", "node", "rust+node", "none")
-ANSI = re.compile(r"\x1b\[[0-9;]*m")
+# GitHub run logs carry colour codes either as the ESC byte or as the literal text "^[".
+ANSI = re.compile(r"(?:\x1b|\^\[)\[[0-9;]*m")
 
 
 def dispatch_args(ci_repo: str, a: argparse.Namespace) -> list[str]:

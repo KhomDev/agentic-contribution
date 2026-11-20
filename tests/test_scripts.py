@@ -167,6 +167,14 @@ class Ci(unittest.TestCase):
             self.assertEqual(ci.main(["grep", "7", "x"], gh=gh), 3)
         self.assertIn("still in progress", out.getvalue())
 
+    def test_grep_strips_literal_caret_colour_codes(self):
+        log = "run\tRun command\t^[[1m^[[91mexpected `NearToken`, found `u128`^[[0m\n"
+        out = io.StringIO()
+        with redirect_stdout(out):
+            ci.main(["grep", "5", "expected"], gh=Gh(runner=FakeGh().add(("gh", "run", "view"), log)))
+        self.assertIn("expected `NearToken`, found `u128`", out.getvalue())
+        self.assertNotIn("^[", out.getvalue())
+
     def test_grep_strips_ansi(self):
         log = "job\tstep\t\x1b[32mRESULT [PASS]\x1b[0m\nnoise\n"
         fake = FakeGh().add(("gh", "run", "view"), log)
