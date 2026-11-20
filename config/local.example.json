@@ -1,0 +1,23 @@
+{
+  "_comment": "Copy to local/config.json (gitignored) and fill in. Deep-merged over config/repos.json: objects merge, lists are appended. The tests run against this example file, never against your real overlay.",
+  "workspace_root": "C:/work/example-workspace",
+  "oss_root": "C:/work/example-workspace/oss",
+  "state_file": "C:/work/example-workspace/oss/WORKBOARD.md",
+  "signing_key": "C:/Users/example/.ssh/id_ed25519_signing.pub",
+  "knowledge_search": "rg -n -i \"<topic words>\" C:/work/example-workspace/notes",
+  "knowledge_general": ["C:/work/example-workspace/notes"],
+  "public_text": {
+    "error_patterns": ["\\bexample-secret-project\\b", "\\bjdoe\\b"]
+  },
+  "private_terms": ["example-secret-project", "jdoe"],
+  "repos": {
+    "mpc": {
+      "knowledge": ["notes/mpc"],
+      "private_rules": "PRIVATE: read notes/mpc/exclusions.md before choosing work."
+    },
+    "outlayer": {
+      "knowledge": [],
+      "private_rules": "PRIVATE: example held items go here."
+    }
+  }
+}

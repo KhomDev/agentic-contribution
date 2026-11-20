@@ -1,0 +1,31 @@
+{
+  "checked": "2026-11-20",
+  "files": {
+    "OpenZeppelin/openzeppelin-contracts:.github/PULL_REQUEST_TEMPLATE.md": "7ec66f8f07a732b3af87ac57be151288564a098c83f9977ac5f1c7a44415ede9",
+    "OpenZeppelin/openzeppelin-contracts:CLAUDE.md": "67dbe33c367d591735d6d337ec4c27720e34768add0a8005a647786e1b03d9ab",
+    "OpenZeppelin/openzeppelin-contracts:CONTRIBUTING.md": "03c3e56fc95a783fc4ac1e23a6886d535007b5191448cca15cbd32a166bd5e0b",
+    "anza-xyz/agave:.github/PULL_REQUEST_TEMPLATE.md": "c9015434c47edefc806e5304107b63ba04b0855802d39f0213e1f61b72b89951",
+    "anza-xyz/agave:AGENTS.md": "536c5688ceda37d9bd62bb89cfdec3529305d2399da331aaf04235546bba102d",
+    "anza-xyz/agave:CONTRIBUTING.md": "2117bc38a523d179f84bc0343a6cef8bfdfb759035059cb0f5e4b0e5b9c87515",
+    "foundry-rs/foundry:.github/PULL_REQUEST_TEMPLATE.md": "621fdf01f3c370a54ee7183a0d73de1950320bc0d22a305b23b2bf15819f482d",
+    "foundry-rs/foundry:AGENTS.md": "067ddd9fc82cfd3cf075873f7e33580e0eee4dda04eca6ca5605eb80716e2b8a",
+    "foundry-rs/foundry:CONTRIBUTING.md": "cdb8dedd641dc2a32dbbc1f2bfcc8eb667547273392f096b261ed263ce551545",
+    "modelcontextprotocol/modelcontextprotocol:AI_POLICY.md": "9d0cbd63b565fec9974fe577548dcc9821d7b0585b9f8219afab496e36f0115a",
+    "modelcontextprotocol/rust-sdk:README.md": "4a47014c7a0e4e0c16fb41c06c746417d7a3c4ef32a3bd26af8f0e549d6d8e7c",
+    "near/cargo-near:README.md": "378a670ccf6bafedb40cc712703de22edbdf9856c0a2b2cd2a3d117dcd137c01",
+    "near/docs:CONTRIBUTING.md": "cceeb7fe41548d68f1f6dcde2f8ed0252d0fee3fd345b2534d85bf90b48cf0e5",
+    "near/intents:.agents/AGENTS.md": "3711a288e325413357d0d0f34e3d5179a71105b188e040154de4c181a31f54ed",
+    "near/mpc:AGENTS.md": "5f36bc28172707c9986e720f782a1ce46625b8a102bd0635e5a4334fe841abda",
+    "near/mpc:CONTRIBUTING.md": "878e2bc4a0f7506ec9b8c774d2b97c5c5c4e54fcdedac99291f120cab43cffba",
+    "near/near-api-js:.github/pull_request_template.md": "34cad2c63da37a3e44ccd35762baf232de5aa852ef9f717d1dd2bf6013598710",
+    "near/near-api-js:CONTRIBUTING.md": "dc487c661efc4de5cc64c4008026a6c1e5be1a9c77d6c69e987192cc90115346",
+    "near/near-sdk-rs:CONTRIBUTING.md": "9de938a73b87df16410b358cecc4954d3c7ac6b1526f043866e9301d8cc281b7",
+    "near/nearcore:AGENTS.md": "2041ef0d98776868c1a45676fc4becd22d0d9765a333ed986764ecf36b19458c",
+    "near/nearcore:CONTRIBUTING.md": "7d8af244f55e3857278baaf8a55e68e6677da1ba2cae1e8afa3236bdafeb1125",
+    "out-layer/outlayer:CLAUDE.md": "c83377318b13098371937438a45aee12666945c8d1fbe8536db315068ca8f911",
+    "out-layer/outlayer:CONTRIBUTING.md": "a4e40dc66b5a5fa7f2b273561b4551e17e62113b93493584406a670dabf8c027",
+    "x402-foundation/x402:.github/pull_request_template.md": "6f931d8ab56deab147aaf5bf25be7099252d12d8b6db8ae8e21b497cc2881a14",
+    "x402-foundation/x402:CONTRIBUTING.md": "829a1e296dd5dc25fce2eba64cd6b9e18c3b6c92d002ab0ad46f545ea859827c",
+    "x402-foundation/x402:docs/AGENTS.md": "6372a5d9d491e168f3bb70449229dcec75159a4569e2a9b9f2e7bd162e0e7ffe"
+  }
+}

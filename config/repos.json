@@ -1,0 +1,549 @@
+{
+  "version": 1,
+  "author": "KhomDev",
+  "ci_repo": "KhomDev/oss-ci",
+  "min_rest_quota": 300,
+  "footer": "🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "co_author_pattern": "^Co-Authored-By: Claude [A-Za-z0-9 .]+ <noreply@anthropic\\.com>$",
+  "public_text": {
+    "error_patterns": [
+      "\\bhaiku\\b",
+      "\\bsub-?agents?\\b",
+      "\\borchestrat\\w*",
+      "[A-Za-z]:\\\\Users\\\\",
+      "/c/Users/",
+      "[\\w.+-]+@gmail\\.com"
+    ],
+    "warn_patterns": [
+      "\\baudit(s|ed|ing|or|ors)?\\b",
+      "\\bexploit\\w*",
+      "\\bvulnerab\\w*",
+      "\\battacker\\w*",
+      "\\bagents?\\b"
+    ]
+  },
+  "repos": {
+    "x402": {
+      "upstream": "x402-foundation/x402",
+      "fork": "KhomDev/x402",
+      "default_branch": "main",
+      "budget": 3,
+      "process": {
+        "issue_first": false,
+        "draft_first": true,
+        "cla": false,
+        "signed_commits": true
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: [a-z0-9`].*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "required",
+      "pr_body": "template",
+      "changelog": "typescript/.changeset (pnpm -C typescript changeset); go/.changes/unreleased (make -C go changelog-new); python/x402/changelog.d (towncrier). Docs-only changes skip.",
+      "sources": [
+        "CONTRIBUTING.md",
+        ".github/pull_request_template.md",
+        "docs/AGENTS.md"
+      ],
+      "card": "repos/x402.md",
+      "examples": {
+        "good": [
+          "test(near): allowlist the test asset in the exact integration client",
+          "fix(python/flask): close the wrapped WSGI response on paid routes"
+        ],
+        "bad": [
+          "Fix the NEAR relayer queue",
+          "fix: Add expiry check.",
+          "near: evict expired entries"
+        ]
+      },
+      "body_sections": [
+        "Description",
+        "Tests",
+        "Checklist"
+      ],
+      "oss_dir": "x402"
+    },
+    "intents": {
+      "upstream": "near/intents",
+      "fork": "KhomDev/intents",
+      "default_branch": "main",
+      "budget": 3,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)(!?\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none",
+      "sources": [
+        ".agents/AGENTS.md"
+      ],
+      "card": "repos/intents.md",
+      "examples": {
+        "good": [
+          "feat!(codec): `IoDecoder::from_buf_read` and `IoEncoder::to_string` methods",
+          "chore: fix docs",
+          "test(cli-utils): cover HashSource"
+        ],
+        "bad": [
+          "Add tests for HashSource",
+          "tests: cover hash source",
+          "feature: new codec"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near"
+    },
+    "mpc": {
+      "upstream": "near/mpc",
+      "fork": "KhomDev/mpc",
+      "default_branch": "main",
+      "budget": 3,
+      "process": {
+        "issue_first": true,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none",
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md"
+      ],
+      "card": "repos/mpc.md",
+      "examples": {
+        "good": [
+          "refactor(node): rename IncomingConnection to IncomingConnectionInfo",
+          "build(oss-scanner): Use clang instead of gcc",
+          "ci: scrub credentials from the review agent's commands"
+        ],
+        "bad": [
+          "Rename IncomingConnection",
+          "refactor(Node) rename",
+          "tests: isolate gauges"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near"
+    },
+    "nearcore": {
+      "upstream": "near/nearcore",
+      "fork": "KhomDev/nearcore",
+      "default_branch": "master",
+      "budget": 3,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(fix|feat|refactor|doc|test|chore|perf|revert)(\\([a-z0-9][a-z0-9_-]*\\))?: [^A-Z\\s].*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "CHANGELOG.md [unreleased] only for user-observable changes (protocol feature, config option, metric).",
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md"
+      ],
+      "card": "repos/nearcore.md",
+      "examples": {
+        "good": [
+          "test: add delayed receipt example",
+          "feat(spice): add catchup logic",
+          "fix(state-sync): properly validate header"
+        ],
+        "bad": [
+          "[perf] optimistic witness",
+          "fix(State-Sync): validate",
+          "test(resharding) epoch boundary",
+          "doc: Update validator reward calculation",
+          "docs: update readme"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "nearcore"
+    },
+    "docs": {
+      "upstream": "near/docs",
+      "fork": "KhomDev/docs",
+      "default_branch": "master",
+      "budget": 3,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none",
+      "sources": [
+        "CONTRIBUTING.md"
+      ],
+      "card": "repos/docs.md",
+      "examples": {
+        "good": [
+          "Explain that a contract is not a backend",
+          "fix near-sdk 5 examples that pass raw integers for Gas and NearToken"
+        ],
+        "bad": [
+          "Fix the gas examples."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "docs"
+    },
+    "outlayer": {
+      "upstream": "out-layer/outlayer",
+      "fork": "KhomDev/outlayer",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": true,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none",
+      "sources": [
+        "CONTRIBUTING.md",
+        "CLAUDE.md"
+      ],
+      "card": "repos/outlayer.md",
+      "examples": {
+        "good": [
+          "contract: a missing resource limit takes its default (fixes #31)",
+          "fix: add Authorization header to encrypt-policy call"
+        ],
+        "bad": [
+          "contract: fix limits."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "outlayer"
+    },
+    "near-api-js": {
+      "upstream": "near/near-api-js",
+      "fork": "KhomDev/near-api-js",
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": true,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "pnpm changeset for any change to a published package.",
+      "sources": [
+        "CONTRIBUTING.md",
+        ".github/pull_request_template.md"
+      ],
+      "card": "repos/near-api-js.md",
+      "examples": {
+        "good": [
+          "fix: recognize flattened contract panic errors",
+          "docs: explain structured transaction failure context"
+        ],
+        "bad": [
+          "Skip the last backoff sleep",
+          "fix - skip sleep"
+        ]
+      },
+      "body_sections": [
+        "Pre-flight checklist",
+        "Motivation",
+        "Test Plan"
+      ],
+      "oss_dir": "near-api-js"
+    },
+    "openzeppelin": {
+      "upstream": "OpenZeppelin/openzeppelin-contracts",
+      "fork": "KhomDev/openzeppelin-contracts",
+      "default_branch": "master",
+      "budget": 1,
+      "process": {
+        "issue_first": true,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^[A-Z`].*[^.]$",
+        "max_len": 80,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "npx changeset add for behaviour changes; skip for NatSpec-only, internal refactors, repo plumbing.",
+      "sources": [
+        "CONTRIBUTING.md",
+        "CLAUDE.md",
+        ".github/PULL_REQUEST_TEMPLATE.md"
+      ],
+      "card": "repos/openzeppelin.md",
+      "examples": {
+        "good": [
+          "Add a warning about adding features in an upgrade",
+          "Raise default `_guaranteedPostOpCost` to cover EIP-8038 repricing"
+        ],
+        "bad": [
+          "docs: fix natspec",
+          "fix typo."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "openzeppelin-contracts"
+    },
+    "foundry": {
+      "upstream": "foundry-rs/foundry",
+      "fork": "KhomDev/foundry",
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|perf|chore|docs|test|refactor)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: [a-z0-9`].*[^.]$",
+        "max_len": 72,
+        "warn_len": 60,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none (release notes are generated)",
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        ".github/PULL_REQUEST_TEMPLATE.md"
+      ],
+      "card": "repos/foundry.md",
+      "examples": {
+        "good": [
+          "fix(wallets): load multiple Ledger signers",
+          "fix(config): use slashes in scoped alias warning target"
+        ],
+        "bad": [
+          "Fix ledger signers",
+          "fix(wallets): Load multiple Ledger signers.",
+          "feature: add cheatcode"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "foundry"
+    },
+    "rust-sdk": {
+      "comment_disclosure": true,
+      "upstream": "modelcontextprotocol/rust-sdk",
+      "fork": "KhomDev/rust-sdk",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": true,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: [a-z0-9`].*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "required",
+      "pr_body": "template",
+      "changelog": "none (release-plz generates CHANGELOG.md from conventional commits)",
+      "sources": [
+        "README.md"
+      ],
+      "extra_sources": [
+        {
+          "repo": "modelcontextprotocol/modelcontextprotocol",
+          "path": "AI_POLICY.md"
+        }
+      ],
+      "card": "repos/rust-sdk.md",
+      "examples": {
+        "good": [
+          "fix(client): keep private scope when merging list pages",
+          "fix(transport): match unix-socket media types case-insensitively"
+        ],
+        "bad": [
+          "Fix client scope merging",
+          "fix(Client): keep scope",
+          "fix(client): Keep private scope"
+        ]
+      },
+      "body_sections": [],
+      "commit_body_max_line": 100,
+      "oss_dir": "rust-sdk"
+    },
+    "agave": {
+      "upstream": "anza-xyz/agave",
+      "fork": "KhomDev/agave",
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": true,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(?![a-z0-9/_.-]+:\\S)([a-z0-9][a-z0-9/_.-]*: )*[A-Za-z`].*[^.]$",
+        "max_len": 80,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "CHANGELOG.md only for features that belong in release notes.",
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        ".github/PULL_REQUEST_TEMPLATE.md"
+      ],
+      "card": "repos/agave.md",
+      "examples": {
+        "good": [
+          "Fix out-of-memory error in validator",
+          "cli/cli-output/tokens: Use transaction-status-client-types",
+          "runtime: tests: add ebpp late deployment test"
+        ],
+        "bad": [
+          "Fixed the keygen panic.",
+          "cli:fix port"
+        ]
+      },
+      "body_sections": [
+        "Problem",
+        "Summary of Changes"
+      ],
+      "oss_dir": "agave"
+    },
+    "cargo-near": {
+      "upstream": "near/cargo-near",
+      "fork": null,
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none (release-plz)",
+      "sources": [
+        "README.md"
+      ],
+      "card": "repos/cargo-near.md",
+      "examples": {
+        "good": [
+          "chore: update nearcore deps to 2.14 stable",
+          "ci: fix webpki advisories in cargo audit"
+        ],
+        "bad": [
+          "Update deps",
+          "chore update deps"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "cargo-near"
+    },
+    "near-sdk-rs": {
+      "upstream": "near/near-sdk-rs",
+      "fork": null,
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none (release-plz)",
+      "sources": [
+        "CONTRIBUTING.md"
+      ],
+      "card": "repos/near-sdk-rs.md",
+      "examples": {
+        "good": [
+          "fix(near-sdk-core): bounded types follow-ups from #1651 review",
+          "refactor: centralize shared workspace dependencies"
+        ],
+        "bad": [
+          "Centralize dependencies"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near-sdk-rs"
+    }
+  }
+}
