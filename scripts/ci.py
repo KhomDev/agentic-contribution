@@ -21,7 +21,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _common import Gh, load_config  # noqa: E402
+from _common import Gh, GhError, load_config  # noqa: E402
 
 TOOLCHAINS = ("rust", "node", "rust+node", "none")
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
@@ -131,7 +131,13 @@ def main(argv: list[str] | None = None, gh: Gh | None = None) -> int:
     a = build_parser().parse_args(argv)
     gh = gh or Gh(min_quota=config["min_rest_quota"])
     handler = {"dispatch": cmd_dispatch, "mpc": cmd_mpc, "status": cmd_status, "grep": cmd_grep}[a.cmd]
-    return handler(gh, config["ci_repo"], a)
+    try:
+        return handler(gh, config["ci_repo"], a)
+    except GhError as exc:
+        if "still in progress" in str(exc):
+            print(f"run {getattr(a, 'run_id', '?')} is still in progress; check again in 5 minutes")
+            return 3
+        raise
 
 
 if __name__ == "__main__":

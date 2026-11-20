@@ -135,6 +135,16 @@ class Ci(unittest.TestCase):
                      "--command", "c", "--label", "l"], gh=Gh(runner=fake, min_quota=300))
         self.assertIn("run 1 u1", out.getvalue())
 
+    def test_grep_on_running_job_is_friendly(self):
+        import subprocess
+
+        gh = Gh(runner=lambda args: subprocess.CompletedProcess(
+            args, 1, "", "run 7 is still in progress; logs will be available when it is complete"))
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(ci.main(["grep", "7", "x"], gh=gh), 3)
+        self.assertIn("still in progress", out.getvalue())
+
     def test_grep_strips_ansi(self):
         log = "job\tstep\t\x1b[32mRESULT [PASS]\x1b[0m\nnoise\n"
         fake = FakeGh().add(("gh", "run", "view"), log)
