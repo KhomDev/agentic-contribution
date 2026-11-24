@@ -45,6 +45,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 Use the model that is actually orchestrating: Opus or Fable, with its version. `pr_lint.py` accepts
 any `Claude <model>` trailer and rejects two of them.
 
+Some upstreams forbid AI co-author trailers outright. When a repo sets `commit_trailer: "none"` in
+`config/repos.json` (OpenZeppelin/cairo-contracts is the first), commit with **no trailer at all**;
+`pr_lint.py` then errors if one is present. The PR body footer is unaffected.
+
 Before force-pushing a branch behind an open PR, ask yourself whether the reviewer has already seen
 it. If they have, a new commit beats a rewrite. Either way, the push is a gated action.
 

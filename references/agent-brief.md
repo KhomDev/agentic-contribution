@@ -109,7 +109,40 @@ read-only. If a note discusses a vulnerability or a held finding, leave that
 topic alone entirely; public work must not touch it.
 
 OUTPUT
-Write <OSS_ROOT>/<OSS_DIR>/drafts/<YYYY-MM-DD>-<slug>.md with these sections:
+Write <OSS_ROOT>/<OSS_DIR>/drafts/<YYYY-MM-DD>-<slug>.md. Write it EVEN when
+you are not finished: if CI is still running when you must stop, write the
+draft with verdict HOLD, say which runs are pending in not_run, and stop.
+Never end with only a chat report.
+
+The file starts with a machine-readable header inside an HTML comment. The
+orchestrator's verify_draft.py checks every field against GitHub, so put
+nothing in it you have not run:
+  <!-- oss-draft
+  {"repo": "<REPO_KEY>", "verdict": "READY|HOLD|NOTHING",
+   "kind": "pr|issue|comment|none",
+   "base": {"ref": "<DEFAULT_BRANCH>", "sha": "<the upstream commit you examined>"},
+   "claims": [{"id": "C1", "kind": "behaviour|absence|line|cause|novelty",
+               "text": "one sentence", "evidence": ["command -> the output line"],
+               "searched": ["absence claims only: every place you looked"]}],
+   "ci_runs": [{"id": 123, "role": "red|green|baseline|other",
+                "expect": "failure|success"}],
+   "prior_art": {"queries": ["at least three searches"], "related": ["#n state"]},
+   "precedent": ["a merged sibling fix by a maintainer, or empty"],
+   "line_refs": [{"path": "repo/relative/file.rs", "line": 42,
+                  "text": "a substring of that line"}],
+   "not_run": ["what you did not run, and why"]}
+  -->
+Rules for the header:
+- An "absence" claim (X does not exist, nothing handles Y) lists at least two
+  places searched, across EVERY subcommand, crate or module that could hold
+  it. One --help output is not a search.
+- A READY pr needs a red run (expect failure) and a green run (expect success).
+- Every path:line in the draft body also goes into line_refs.
+- precedent: before drafting, search the history for a maintainer fix of the
+  same pattern elsewhere (git log -S '<pattern>', closed issues on the same
+  helper). Cite it if found; it is the strongest argument a draft can have.
+
+Then these sections:
   ## Verdict          READY / HOLD (why) / NOTHING (what you checked)
   ## Item             issue link, kind (pr | issue | comment), one-line summary
   ## Prior art        searches run and results

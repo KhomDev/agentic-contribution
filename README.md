@@ -10,7 +10,7 @@ everything an agent claims and prepares each public action as a gate packet. **T
 approves each one with a click in the chat. Nothing appears on GitHub under the operator's name
 without that click.
 
-It's written for one contributor (KhomDev) and 13 repositories, but the engine is generic. Swap the
+It's written for one contributor (KhomDev) and 21 repositories, but the engine is generic. Swap the
 repo cards and `config/repos.json` for your own.
 
 ## Why it's built this way
@@ -51,6 +51,18 @@ oss-contrib/                      (clone this repo to ~/.claude/skills/oss-contr
 │   ├── knowledge-sources.md      the private overlay and the rules for private knowledge
 │   └── state-and-host.md         state file, compaction, Windows traps
 ├── scripts/                      stdlib-only Python, all GitHub access through `gh`
+│   ├── census.py                 open PRs per repo against each budget
+│   ├── sweep.py                  review sweep: which PRs and issues owe a reply
+│   ├── ledger.py                 actionable state: next action and due date per item
+│   ├── launch.py                 agent launch discipline and a real route check
+│   ├── brief.py                  builds each agent's prompt
+│   ├── verify_draft.py           checks an agent draft against its own evidence
+│   ├── refcheck.py               checks every path:line in public text against upstream
+│   ├── pr_lint.py                title, template, footer, disclosure, private-term lint
+│   ├── signed_check.py           verified signatures and author on every commit
+│   ├── outcomes.py               per-repo acceptance rates of what was filed
+│   ├── ci.py                     quota-guarded runs on the CI repo
+│   └── rules_drift.py            upstream contributor-rule changes
 └── tests/                        offline unit tests (python -m unittest)
 ```
 
@@ -76,7 +88,7 @@ The overlay holds the private parts:
 
 In a Claude Code session, say something like:
 
-- "Keep contributing to the 13 repos." This runs the full loop: review sweep, census, agent rounds,
+- "Keep contributing to the 21 repos." This runs the full loop: review sweep, census, agent rounds,
   verification, gate.
 - "Find new bugs in near-api-js." This starts the discovery lane.
 - "Handle the review comments on our open PRs."
@@ -117,7 +129,8 @@ nothing is posted. Each gate packet is also saved under `<oss_root>/<repo>/gate/
 
 | When | Do |
 |---|---|
-| Weekly | `python scripts/rules_drift.py`. On a change, re-read the file, update the card and `config/repos.json`, then `--update` |
+| Every session | `ledger.py due`, `census.py`, `sweep.py --mark`, in that order |
+| Weekly | `python scripts/rules_drift.py`. On a change, re-read the file, update the card and `config/repos.json`, then `--update`. Also `outcomes.py` to see where the work lands |
 | A repo joins or leaves | Edit `config/repos.json` (with `examples` of real merged titles), add or remove `repos/<key>.md`, run the tests |
 | A repo's title format changes | Update `title.regex` and `examples`; the tests check each good example matches and each bad one doesn't |
 | Before every push of this repo | `python -m unittest discover -s tests` must pass, including the leak test against your real overlay |
@@ -136,7 +149,13 @@ The tests are offline: GitHub calls go through a fake `gh` runner, and the confi
 - the census tally and signing checks;
 - CI argument building and the quota floor;
 - drift detection;
-- prompt assembly, with no placeholder left unfilled, in both lanes;
+- prompt assembly, with no placeholder left unfilled in the brief, the repo rules or the task, in
+  both lanes and for every repo;
+- the sweep's OWED / STATE / BOT / QUIET classification, deduplication and quota guard;
+- the ledger (atomic writes, due dates, the rendered table) and launch discipline (RAM, spacing,
+  cap, and a smoke test that needs a written file);
+- the draft verifier (header schema, absence-claim scope, red/green CI conclusions, moved lines),
+  the reference checker and the outcome tally;
 - the docs: frontmatter, links, and a rules block in every card;
 - a **leak test** that fails if any private term from your overlay, or any user path or email,
   appears in a tracked file.
@@ -149,4 +168,9 @@ The skill was also run end to end with real Haiku agents (see "Validation log" i
   authority, which is why `rules_drift.py` exists.
 - `pr_lint.py` catches format problems and leaks. It doesn't judge whether a change is correct; the
   verification checklist and the operator's review do that.
+- `verify_draft.py` and `refcheck.py` check that the evidence exists and still says what the draft
+  claims. They can't tell whether the reasoning is right. On 24 Nov a draft with a real repro was
+  still wrong (cargo-near), and only reading the other subcommands caught it.
+- `sweep.py` marks a human's comment after ours as OWED even when it's addressed to a bot or needs
+  no answer. It decides what to read, not what to say.
 - The banned-term lists can't anticipate every leak. Read the preview before you click.

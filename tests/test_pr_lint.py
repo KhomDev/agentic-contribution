@@ -173,6 +173,14 @@ class Commits(unittest.TestCase):
         f = pr_lint.lint_commit(f"fix(near): x\nbody\n{TRAILER}\n", CONFIG["repos"]["x402"], CONFIG, "c")
         self.assertTrue(any("blank" in x.message for x in errors(f)))
 
+    def test_repo_may_forbid_trailer(self):
+        repo = CONFIG["repos"]["cairo-contracts"]
+        clean = "fix(vesting): reject zero-duration schedules\n\nwhy\n"
+        self.assertEqual(errors(pr_lint.lint_commit(clean, repo, CONFIG, "c")), [])
+        with_trailer = clean + f"\n{TRAILER}\n"
+        f = pr_lint.lint_commit(with_trailer, repo, CONFIG, "c")
+        self.assertTrue(any("forbids" in x.message for x in errors(f)))
+
     def test_subject_format_enforcement(self):
         bad = self.msg(subject="Evict expired entries")
         self.assertTrue(errors(pr_lint.lint_commit(bad, CONFIG["repos"]["rust-sdk"], CONFIG, "c")))

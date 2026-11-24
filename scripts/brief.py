@@ -89,8 +89,15 @@ def build(repo_key: str, task: str, config: dict, discover: bool = False) -> str
         playbook = text_blocks((SKILL_ROOT / "references" / "discovery.md").read_text(encoding="utf-8"),
                                "Playbook (the text agents receive)")[0]
         parts.append(playbook)
-    parts.append(f"TASK\n\n{task.strip()}")
-    return "\n\n".join(parts) + "\n"
+    # Task files are written by the orchestrator and reuse the same placeholders
+    # (<OSS_ROOT>, <OSS_DIR>, ...). Fill them, then refuse any that remain anywhere:
+    # an agent handed a literal "<OSS_ROOT>" writes its draft to the wrong place.
+    parts.append(f"TASK\n\n{fill(task.strip(), values)}")
+    prompt = "\n\n".join(parts) + "\n"
+    left = sorted(set(PLACEHOLDER.findall(prompt)))
+    if left:
+        raise ValueError(f"unfilled placeholders in the prompt (task or repo rules): {left}")
+    return prompt
 
 
 def main(argv: list[str] | None = None) -> int:

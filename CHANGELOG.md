@@ -1,5 +1,55 @@
 # Changelog
 
+## 2026-11-24: v2, precision tooling
+
+Every change here comes from a specific failure in the 22-24 Nov rounds.
+
+New scripts:
+- **`sweep.py`**: the review sweep in one command. It covers every open PR plus every issue or PR
+  the author opened or commented on since the last sweep, classified OWED / STATE / BOT / QUIET,
+  with failing checks. It replaces hand-written GraphQL (one large query returned HTTP 502) and
+  covers filed issues, which `census.py` never did.
+- **`ledger.py`**: the actionable state (`state.json`), with a status, next action and due date per
+  item, written atomically. `ledger.py due` at session start exits 1 when something is due. Two
+  promised follow-ups (a reviewer ping and a deploy re-check, both due 23 Nov) were missed because
+  they lived only in WORKBOARD prose. `render --write` puts the table into the WORKBOARD between
+  markers.
+- **`verify_draft.py`**: agent drafts now start with a machine-readable `oss-draft` header (claims
+  with evidence, CI runs with the expected conclusion, prior-art queries, precedent, line refs,
+  not-run list). The script checks that each CI run exists and concluded as claimed, that an
+  absence claim lists at least two places searched, and that each cited line still holds its
+  text. A cargo-near agent called READY on "the CLI has no `--no-locked` flag" after testing two
+  subcommands; a third defines it.
+- **`refcheck.py`**: resolves every `path:line` in a body on the upstream ref, including bare file
+  names by unique suffix, and fails on missing, out-of-range or moved text. One issue body's refs
+  drifted within two days (511 to 512, 341 to 381).
+- **`launch.py`**: launch discipline (free RAM, spacing, at most 4 running), recorded in the ledger
+  so it survives a compaction. Also a smoke test that only passes when the agent writes a random
+  token to a file: on 24 Nov a test agent returned an empty report, which proved nothing.
+- **`outcomes.py`**: per-repo merged / fixed / rejected / open counts, acceptance rate and median
+  days to land, from one paginated GraphQL search.
+
+Changes:
+- `brief.py` fills placeholders in the task text too, and refuses any `<UPPER_CASE>` placeholder
+  left anywhere in the prompt. Task files with a literal `<OSS_ROOT>` had reached agents.
+- The agent brief requires the `oss-draft` header, requires a HOLD draft file when an agent has to
+  stop before CI finishes (two agents ended with only a chat report), and asks for precedent.
+- The discovery playbook adds self-refutation (is this behaviour intended in another mode? does a
+  test pin it?) and a precedent search.
+- `verification.md`: step 0 runs the tools, step 11 checks precedent, and a new **revival gate**
+  covers held branches and promised PRs (rebase, grep current consumers including dashboards,
+  re-run evidence and prior art, refcheck). An mpc branch was promised publicly and then found to
+  break a dashboard panel that had landed after the first comment.
+- `config/repos.json` v2: `bot_logins` (review bots that are never owed a reply) and `launch`
+  limits. The overlay may set `ledger_file`.
+- Folded in the pending 21-22 Nov work: six new repos (typescript-sdk, alloy, near-cli-rs, viem,
+  anchor, cairo-contracts; 21 in total) and `pr_lint.py`'s per-repo `commit_trailer: "none"` for
+  repos that forbid AI co-author trailers.
+
+Tests: 81 to 123, all offline. Eight targeted mutants (sweep cutoff, bot filter, absence scope,
+CI conclusion, suffix ambiguity, placeholder guard, splice escaping, unknown-memory launch) are
+each caught.
+
 ## 2026-11-20 (c): code quality and efficiency review
 
 Bugs:

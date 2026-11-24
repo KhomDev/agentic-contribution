@@ -76,6 +76,16 @@ RULES FOR DISCOVERY
    say exactly what you tried, so the next round does not repeat it.
 5. In the draft file, add a section "## Discovery" stating the technique, the
    surface and every candidate you rejected and why.
+6. Try to refute your own finding before you call it READY. Ask: is this
+   behaviour intended somewhere else (another subcommand, mode, feature flag
+   or caller that relies on it)? Does a test pin it as correct? Grep the whole
+   repo for the flag, function or message, not just the path you entered by.
+   A finding that survives this is worth filing; one that does not is a
+   rejected candidate for the Discovery section.
+7. Precedent: search the history for the same pattern fixed elsewhere
+   (git log -S '<pattern>', merged PRs touching the same helper). A maintainer's
+   own fix of a sibling bug is the strongest case you can make; a maintainer's
+   rejection of the same class means HOLD. Record either in the header.
 ```
 
 ## Security triage (orchestrator)

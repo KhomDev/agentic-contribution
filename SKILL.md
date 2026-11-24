@@ -1,6 +1,6 @@
 ---
 name: oss-contrib
-description: Run KhomDev's open-source contribution program across 15 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs, near-token-rs, near-gas-rs). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
+description: Run KhomDev's open-source contribution program across 21 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs, near-token-rs, near-gas-rs, MCP typescript-sdk, alloy, near-cli-rs, viem, Anchor, OZ Cairo). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
 ---
 
 # OSS contribution program
@@ -33,9 +33,10 @@ the knowledge sources and the private terms. Scripts merge it over `config/repos
 
 ## Start of every session (and after a compaction)
 
-1. Read the state file (`state_file` in the overlay): the live state.
+1. `python scripts/ledger.py due`: anything promised for today or earlier comes first (exit 1 means
+   something is due). Then read the state file (`state_file` in the overlay) for context.
 2. `python scripts/census.py`: open PRs per repo against each budget.
-3. Run the review sweep (below) before starting any new work.
+3. `python scripts/sweep.py --mark`: the review sweep (below), before any new work.
 4. If it's been a week since the last check: `python scripts/rules_drift.py`. If a repo changed its
    rules, update its card and `config/repos.json`, then run with `--update`.
 
@@ -45,8 +46,11 @@ authenticated `gh`.
 
 ## The loop
 
-1. **Review sweep, first.** For every open PR: new reviews, bot comments, CI status, merge state.
-   Draft each fix or reply, verify it and gate it. Replies to maintainers go out within a day.
+1. **Review sweep, first.** `sweep.py` lists every open PR and every issue we filed or commented
+   on, marked OWED (a human acted after our last word), STATE (closed or merged), BOT or QUIET, with
+   failing checks. Read each OWED and STATE item yourself, then draft, verify and gate the reply.
+   Replies to maintainers go out within a day. Every promise you make ("I'll rebase", "re-check
+   after the deploy") becomes a ledger item with a due date: `ledger.py add ... --due`.
 2. **Pick slots and a lane.** A repo with `free > 0` in the census, and no PR opened there today,
    can take an agent. Choose the lane per repo:
    - **Issue lane**: an unclaimed issue fits, ideally one with a maintainer-stated fix.
@@ -57,21 +61,32 @@ authenticated `gh`.
    - Issue-first repos (mpc, near-api-js, OpenZeppelin, rust-sdk) get an issue draft first; the PR
      waits for a maintainer's reply. Discovery findings in any repo usually start as an issue with a
      minimal repro.
+   - `outcomes.py` shows, per repo, how much of what we filed landed and how fast. Prefer repos that
+     land our work; treat a `not_planned` streak as a signal to raise the bar there.
 3. **Launch agents.** Build each prompt with
-   `python scripts/brief.py --repo <key> [--discover] --task-file <task.txt>`, write it to a file,
-   and start `Agent(model: "haiku", run_in_background: true)` telling it to read that file first.
-   Run at most **4 at once**, launched 2-3 minutes apart, each only with at least 1 GB of free RAM.
-   Record each agent and its task in the state file.
+   `python scripts/brief.py --repo <key> [--discover] --task-file <task.txt>` (task files may use the
+   same `<OSS_ROOT>`-style placeholders; any left unfilled is an error), write it to a file, and start
+   `Agent(model: "haiku", run_in_background: true)` telling it to read that file first. Before each
+   launch `launch.py check` must say LAUNCH OK (free RAM, spacing, at most 4 running); then
+   `launch.py record`, and `launch.py finish` when the agent reports. After a billing or routing
+   failure, prove the route with `launch.py smoke-prompt` / `smoke-check`: an empty report proves
+   nothing, only the written file does.
 4. **Wait well.** Never poll CI faster than every 5 minutes, and never use `gh run watch`. When an
    agent finishes you get a notification. Don't check on it.
-5. **Verify** each draft with [references/verification.md](references/verification.md), all 10
-   points. For discovery findings, re-run the repro yourself and do the security triage in
+5. **Verify** each draft. First `verify_draft.py <draft>`: it checks the draft's `oss-draft` header,
+   that every CI run exists and concluded as claimed, that absence claims name their search scope,
+   and that cited lines still say what they claim. Then work through
+   [references/verification.md](references/verification.md), all 11 points. For discovery findings,
+   re-run the repro yourself and do the security triage in
    [references/discovery.md](references/discovery.md). Fix or reject. Never forward an agent's claim
-   you haven't checked.
+   you haven't checked. A green script is necessary, never sufficient.
 6. **Gate.** Write the packet, run `pr_lint.py` (0 errors; `--comment` for issues, comments and
-   replies) and `signed_check.py` (OK), then ask the operator with `AskUserQuestion`, at most 4 items
-   per call, each with the exact text in `preview`.
-7. **Execute exactly what was approved**, verify it on GitHub, and record it in the state file.
+   replies), `refcheck.py` on the exact body (every `path:line` OK at today's upstream) and
+   `signed_check.py` (OK), then ask the operator with `AskUserQuestion`, at most 4 items per call,
+   each with the exact text in `preview`.
+7. **Execute exactly what was approved**, verify it on GitHub, and record it: a dated line in the
+   state file, and the item's next action and due date in the ledger (`ledger.py update`, then
+   `ledger.py render --write` to refresh the table at the top of the state file).
 8. **Learn.** Corrections, quirks, dead ends and "techniques tried, nothing found" go into
    `<oss_root>/<oss_dir>/RESEARCH.md` or the repo card.
 
@@ -81,8 +96,11 @@ authenticated `gh`.
   means "no".
 - **Evidence or it didn't happen.** A fix needs a test that is red without it and green with it. A
   discovery finding needs a repro that was actually run. A flaky test needs a 20-seed shuffle. A
-  "doesn't exist" claim needs a grep under three names. See
-  [references/ci-and-evidence.md](references/ci-and-evidence.md).
+  "doesn't exist" claim needs a grep under three names, across every subcommand, crate or module
+  that could hold it. See [references/ci-and-evidence.md](references/ci-and-evidence.md).
+- **A held item is re-proven before it goes public.** Rebase it, re-run its evidence, re-run prior
+  art and grep current upstream for every consumer of what it changes (dashboards and configs
+  included). See the revival gate in [references/verification.md](references/verification.md).
 - **Prior art gets credit, never a copy.** If a stale PR fixes it, comment crediting the author.
 - **Budget.** Stay within `budget` open PRs per repo (`config/repos.json`), one new PR per repo per
   day, quality over count. x402's CONTRIBUTING forbids batch-generated low-effort PRs, and
@@ -118,6 +136,9 @@ orchestrator notes such as template, draft-first, CLA, CI command and lessons le
 | outlayer | [repos/outlayer.md](repos/outlayer.md) | openzeppelin | [repos/openzeppelin.md](repos/openzeppelin.md) |
 | near-api-js | [repos/near-api-js.md](repos/near-api-js.md) | near-token | [repos/near-token-rs.md](repos/near-token-rs.md) |
 | near-gas | [repos/near-gas-rs.md](repos/near-gas-rs.md) | | |
+| typescript-sdk | [repos/typescript-sdk.md](repos/typescript-sdk.md) | alloy | [repos/alloy.md](repos/alloy.md) |
+| near-cli | [repos/near-cli.md](repos/near-cli.md) | viem | [repos/viem.md](repos/viem.md) |
+| anchor | [repos/anchor.md](repos/anchor.md) | cairo-contracts | [repos/cairo-contracts.md](repos/cairo-contracts.md) |
 
 ## Scripts
 
@@ -129,8 +150,14 @@ orchestrator notes such as template, draft-first, CLA, CI command and lessons le
 | `signed_check.py --repo K --pr N` | GitHub-verified signatures and the KhomDev noreply author on every commit |
 | `ci.py dispatch / mpc / status / grep` | Quota-guarded runs on `KhomDev/oss-ci`; no watch by design |
 | `rules_drift.py [--update]` | Detects upstream changes to the files each card was written from |
+| `sweep.py [--since T] [--mark] [--no-ci]` | The review sweep: OWED / STATE / BOT / QUIET per PR and issue, with failing checks |
+| `ledger.py add / update / done / due / list / render` | The actionable state: next action and due date per item; `due` exits 1 when something is due |
+| `launch.py check / record / finish / running / smoke-*` | Launch discipline (RAM, spacing, cap) and a route test that needs a written file |
+| `verify_draft.py <draft> [--offline]` | Checks an agent draft's `oss-draft` header, CI conclusions and cited lines |
+| `refcheck.py --repo K --file B [--ref R]` | Every `path:line` in a body, resolved on upstream; fails on missing, out-of-range or moved |
+| `outcomes.py [--since D]` | Per-repo acceptance: merged, fixed, rejected, open, median days to land |
 
-Tests: `python -m unittest discover -s tests -v` from the skill folder (offline, about 1 s).
+Tests: `python -m unittest discover -s tests -v` from the skill folder (offline, about 2 s).
 
 ## More
 

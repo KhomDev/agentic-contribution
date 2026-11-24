@@ -1,10 +1,32 @@
 {
-  "version": 1,
+  "version": 2,
   "author": "KhomDev",
   "ci_repo": "KhomDev/oss-ci",
   "min_rest_quota": 300,
   "footer": "🤖 Generated with [Claude Code](https://claude.com/claude-code)",
   "co_author_pattern": "^Co-Authored-By: Claude [A-Za-z0-9 .]+ <noreply@anthropic\\.com>$",
+  "bot_logins": [
+    "greptile-apps",
+    "coderabbitai",
+    "carsonbot402",
+    "PhilBot402",
+    "mintlify",
+    "vercel",
+    "changeset-bot",
+    "codecov",
+    "github-actions",
+    "dependabot",
+    "claude",
+    "copilot-pull-request-reviewer",
+    "sonarqubecloud",
+    "netlify",
+    "socket-security"
+  ],
+  "launch": {
+    "min_free_mb": 1024,
+    "spacing_s": 150,
+    "max_agents": 4
+  },
   "public_text": {
     "error_patterns": [
       "\\bhaiku\\b",
@@ -620,6 +642,253 @@
       },
       "body_sections": [],
       "oss_dir": "near-sdk-rs"
+    },
+    "typescript-sdk": {
+      "comment_disclosure": true,
+      "upstream": "modelcontextprotocol/typescript-sdk",
+      "fork": "KhomDev/typescript-sdk",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "required",
+      "pr_body": "prose",
+      "changelog": "none stated in CONTRIBUTING.md; `main` is v2, `v1.x` holds v1 fixes.",
+      "sources": [
+        "CONTRIBUTING.md",
+        "CLAUDE.md",
+        "REVIEW.md"
+      ],
+      "extra_sources": [
+        {
+          "repo": "modelcontextprotocol/modelcontextprotocol",
+          "path": "AI_POLICY.md"
+        }
+      ],
+      "card": "repos/typescript-sdk.md",
+      "examples": {
+        "good": [
+          "fix(server): set Allow: POST on stateless legacy 405 responses",
+          "docs: publish the Skills over MCP guides as an agent skill"
+        ],
+        "bad": [
+          "Fix transport bug",
+          "fix(server): Fix the response."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "typescript-sdk"
+    },
+    "alloy": {
+      "upstream": "alloy-rs/alloy",
+      "fork": "KhomDev/alloy",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": true
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "none (conventional commits; release.toml). Keep the workspace Cargo.lock diff when dependencies change.",
+      "sources": [
+        "CONTRIBUTING.md",
+        ".github/PULL_REQUEST_TEMPLATE.md"
+      ],
+      "card": "repos/alloy.md",
+      "examples": {
+        "good": [
+          "fix(provider): preserve the inner block ID in CallBatchLayer",
+          "chore(primitives): drop the unmaintained paste dependency"
+        ],
+        "bad": [
+          "Remove paste",
+          "fix(provider): Fix block."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "alloy"
+    },
+    "near-cli": {
+      "upstream": "near/near-cli-rs",
+      "fork": "KhomDev/near-cli-rs",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none (release-plz writes CHANGELOG.md from conventional commits)",
+      "sources": [
+        "README.md",
+        "release-plz.toml",
+        "CODEOWNERS"
+      ],
+      "card": "repos/near-cli.md",
+      "examples": {
+        "good": [
+          "fix: show key permissions in the delete-keys preview",
+          "fix: report recipient warnings without a TTY"
+        ],
+        "bad": [
+          "delete keys fix",
+          "feature: add feature"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "near-cli"
+    },
+    "viem": {
+      "upstream": "wevm/viem",
+      "fork": "KhomDev/viem",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|perf|refactor|docs|test|chore|ci|build)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "error",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": ".changeset (pnpx changeset); public API or behaviour changes only",
+      "sources": [
+        "AGENTS.md",
+        ".github/CONTRIBUTING.md",
+        ".github/pull_request_template.md"
+      ],
+      "card": "repos/viem.md",
+      "examples": {
+        "good": [
+          "fix: left-pad odd-length raw hex in toPrefixedMessage",
+          "feat(chains): add Seven Chain (70007)"
+        ],
+        "bad": [
+          "Fix odd length data",
+          "fix: Left-pad odd length data.",
+          "feature: add chain"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "viem"
+    },
+    "anchor": {
+      "upstream": "otter-sec/anchor",
+      "fork": "KhomDev/anchor",
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": true,
+        "cla": false,
+        "signed_commits": true
+      },
+      "title": {
+        "regex": "^(feat|fix|doc|docs|chore|test|refactor|perf|ci|build)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "CHANGELOG.md under ## [Unreleased] (Keep a Changelog); confirm for small fixes",
+      "sources": [
+        "CONTRIBUTING.md",
+        ".github/pull_request_template.md"
+      ],
+      "card": "repos/anchor.md",
+      "examples": {
+        "good": [
+          "fix(lang): silence rust-analyzer inactive-code diagnostics",
+          "doc(lang): document the shared discriminator"
+        ],
+        "bad": [
+          "Coder memcmp fix",
+          "fix(lang): Fix the coder.",
+          "feature: add account type"
+        ]
+      },
+      "body_sections": [
+        "Summary",
+        "Branch Target"
+      ],
+      "oss_dir": "anchor"
+    },
+    "cairo-contracts": {
+      "upstream": "OpenZeppelin/cairo-contracts",
+      "fork": "KhomDev/cairo-contracts",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": true,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": true
+      },
+      "title": {
+        "regex": "^(feat|fix|refactor|test|docs|chore|perf|ci|build)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "error",
+      "commit_trailer": "none",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "CHANGELOG.md under ## Unreleased, grouped by Added/Changed/Fixed, with the PR number",
+      "sources": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "GUIDELINES.md",
+        "ARCHITECTURE.md"
+      ],
+      "card": "repos/cairo-contracts.md",
+      "examples": {
+        "good": [
+          "fix(vesting): reject zero-duration schedules",
+          "docs(erc20): clarify the transfer hook"
+        ],
+        "bad": [
+          "Fixed vesting schedules",
+          "fix(vesting): Reject zero schedules.",
+          "feature: add hook"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "cairo-contracts"
     }
   }
 }

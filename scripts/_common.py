@@ -129,3 +129,20 @@ class Gh:
 def die(msg: str, code: int = 2) -> None:
     print(msg, file=sys.stderr)
     raise SystemExit(code)
+
+
+def is_bot(login: str | None, config: dict, user_type: str | None = None) -> bool:
+    """True for GitHub Apps, `[bot]` accounts and the review bots listed in `bot_logins`."""
+    if not login:
+        return True  # a deleted ("ghost") account cannot be owed a reply
+    if user_type == "Bot" or login.endswith("[bot]"):
+        return True
+    return login.lower() in {b.lower() for b in config.get("bot_logins", [])}
+
+
+def ledger_path(config: dict) -> Path:
+    """The structured state ledger: `ledger_file` in the overlay, else `<oss_root>/state.json`."""
+    if config.get("ledger_file"):
+        return Path(config["ledger_file"])
+    require(config, "oss_root")
+    return Path(config["oss_root"]) / "state.json"

@@ -17,8 +17,8 @@ class ConfigShape(unittest.TestCase):
     def setUpClass(cls):
         cls.config = load_config(local=EXAMPLE_LOCAL_PATH)
 
-    def test_fifteen_repos(self):
-        self.assertEqual(len(self.config["repos"]), 15)
+    def test_repo_count(self):
+        self.assertEqual(len(self.config["repos"]), 21)
 
     def test_every_repo_has_required_fields(self):
         for key, repo in self.config["repos"].items():
@@ -34,6 +34,8 @@ class ConfigShape(unittest.TestCase):
                 self.assertIn(repo["commit_subject_enforcement"], {"error", "warn"})
                 self.assertIn(repo["default_branch"], {"main", "master"})
                 self.assertGreaterEqual(repo["budget"], 1)
+                if "commit_trailer" in repo:
+                    self.assertIn(repo["commit_trailer"], {"required", "none"})
                 self.assertEqual(set(repo["process"]), {"issue_first", "draft_first", "cla", "signed_commits"})
 
     def test_fork_is_khomdev_or_null(self):
