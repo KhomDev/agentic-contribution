@@ -10,7 +10,7 @@ everything an agent claims and prepares each public action as a gate packet. **T
 approves each one with a click in the chat. Nothing appears on GitHub under the operator's name
 without that click.
 
-It's written for one contributor (KhomDev) and 21 repositories, but the engine is generic. Swap the
+It's written for one contributor (KhomDev) and 24 repositories, but the engine is generic. Swap the
 repo cards and `config/repos.json` for your own.
 
 ## Why it's built this way
@@ -88,7 +88,7 @@ The overlay holds the private parts:
 
 In a Claude Code session, say something like:
 
-- "Keep contributing to the 21 repos." This runs the full loop: review sweep, census, agent rounds,
+- "Keep contributing to the 24 repos." This runs the full loop: review sweep, census, agent rounds,
   verification, gate.
 - "Find new bugs in near-api-js." This starts the discovery lane.
 - "Handle the review comments on our open PRs."

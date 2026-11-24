@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-24: v2.1, three Solana tooling repos
+
+- Added `litesvm` (LiteSVM/litesvm), `mollusk` (anza-xyz/mollusk) and `pinocchio`
+  (anza-xyz/pinocchio): repo cards, `config/repos.json` entries, program table. All three merged
+  bug-fix PRs from outside authors in the 60 days to 24 Nov (16, 19 and 5). None publishes a
+  CONTRIBUTING file, so each card is written from the README, CI workflow and build scripts, and
+  the title rules (enforcement `warn`) from recent merged titles.
+- Considered and left out: Trident (no commits since 2025-11), `anza-xyz/kit` (CONTRIBUTING asks
+  contributors not to have AI write PR descriptions), and protocol repos that are bug-bounty
+  targets (conflict of interest with private research).
+
 ## 2026-11-24: v2, precision tooling
 
 Every change here comes from a specific failure in the 22-24 Nov rounds.

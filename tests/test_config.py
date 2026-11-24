@@ -18,7 +18,7 @@ class ConfigShape(unittest.TestCase):
         cls.config = load_config(local=EXAMPLE_LOCAL_PATH)
 
     def test_repo_count(self):
-        self.assertEqual(len(self.config["repos"]), 21)
+        self.assertEqual(len(self.config["repos"]), 24)
 
     def test_every_repo_has_required_fields(self):
         for key, repo in self.config["repos"].items():

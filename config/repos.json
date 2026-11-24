@@ -889,6 +889,125 @@
       },
       "body_sections": [],
       "oss_dir": "cairo-contracts"
+    },
+    "litesvm": {
+      "upstream": "LiteSVM/litesvm",
+      "fork": "KhomDev/litesvm",
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|doc|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "CHANGELOG.md under ## [Unreleased] (Keep a Changelog, ### Fixed / ### Changed, link the PR)",
+      "sources": [
+        "README.md",
+        "CHANGELOG.md",
+        "justfile",
+        ".github/workflows/ci.yml"
+      ],
+      "card": "repos/litesvm.md",
+      "examples": {
+        "good": [
+          "fix: do not panic when a transaction calls a deleted program",
+          "fix(token): let FreezeAccount and ThawAccount target any token account"
+        ],
+        "bad": [
+          "Fixed bug",
+          "fix: Fix the thing."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "litesvm"
+    },
+    "mollusk": {
+      "upstream": "anza-xyz/mollusk",
+      "fork": "KhomDev/mollusk",
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^[a-z0-9][a-z0-9/_-]*(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none",
+      "sources": [
+        "README.md",
+        "Makefile",
+        ".github/workflows/main.yml"
+      ],
+      "card": "repos/mollusk.md",
+      "examples": {
+        "good": [
+          "fix: token-2022 ATA helper panics on every call",
+          "harness: serialize sysvars with wincode"
+        ],
+        "bad": [
+          "Update harness",
+          "Fixes #12"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "mollusk"
+    },
+    "pinocchio": {
+      "upstream": "anza-xyz/pinocchio",
+      "fork": "KhomDev/pinocchio",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^[a-z0-9][a-z0-9/_-]*: [A-Z`]\\S*.*$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none (git-cliff generates release notes from commits)",
+      "sources": [
+        "README.md",
+        "SECURITY.MD",
+        "package.json",
+        ".github/workflows/main.yml"
+      ],
+      "card": "repos/pinocchio.md",
+      "examples": {
+        "good": [
+          "programs/token: Return Result from Account::state",
+          "sdk: Use bpf cfg for sol_get_sysvar in impl_sysvar_get"
+        ],
+        "bad": [
+          "fix: token stuff",
+          "programs/token: fix bug."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "pinocchio"
     }
   }
 }

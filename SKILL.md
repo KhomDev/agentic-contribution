@@ -1,6 +1,6 @@
 ---
 name: oss-contrib
-description: Run KhomDev's open-source contribution program across 21 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs, near-token-rs, near-gas-rs, MCP typescript-sdk, alloy, near-cli-rs, viem, Anchor, OZ Cairo). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
+description: Run KhomDev's open-source contribution program across 24 repos (x402, near/intents, near/mpc, nearcore, near/docs, OutLayer, near-api-js, OpenZeppelin, foundry, MCP rust-sdk, agave, cargo-near, near-sdk-rs, near-token-rs, near-gas-rs, MCP typescript-sdk, alloy, near-cli-rs, viem, Anchor, OZ Cairo, LiteSVM, Mollusk, Pinocchio). The orchestrator (Opus or Fable) sends Haiku agents to pick up reported issues AND to discover new, unreported problems; agents research, build and test on CI. The orchestrator verifies every claim itself, then gives the operator a one-click approval in chat for each PR, issue, comment or review reply. Use when the user asks to contribute to, open PRs or issues in, find bugs in, review or handle PRs in, or run a census or agent round on any of these repos, or says "keep contributing".
 ---
 
 # OSS contribution program
@@ -139,6 +139,8 @@ orchestrator notes such as template, draft-first, CLA, CI command and lessons le
 | typescript-sdk | [repos/typescript-sdk.md](repos/typescript-sdk.md) | alloy | [repos/alloy.md](repos/alloy.md) |
 | near-cli | [repos/near-cli.md](repos/near-cli.md) | viem | [repos/viem.md](repos/viem.md) |
 | anchor | [repos/anchor.md](repos/anchor.md) | cairo-contracts | [repos/cairo-contracts.md](repos/cairo-contracts.md) |
+| litesvm | [repos/litesvm.md](repos/litesvm.md) | mollusk | [repos/mollusk.md](repos/mollusk.md) |
+| pinocchio | [repos/pinocchio.md](repos/pinocchio.md) | | |
 
 ## Scripts
 
