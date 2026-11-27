@@ -1,6 +1,6 @@
 # cargo-deny: `EmbarkStudios/cargo-deny`
 
-Sources: `CONTRIBUTING.md` and `README.md` from `main`, plus CI (`.github/workflows/ci.yaml`), read 2026-11-27. The KhomDev fork does not exist yet. Create it (`gh repo fork EmbarkStudios/cargo-deny --clone=false`) only once the operator approves the first PR.
+Sources: `CONTRIBUTING.md` and `README.md` from `main`, plus CI (`.github/workflows/ci.yaml`), read 2026-11-27. The fork `KhomDev/cargo-deny` exists (created 2026-11-27 with the operator's approval). Push only `verify/*` branches there for oss-ci; PR branches only after the operator approves the PR.
 
 ## Agent rules block
 
@@ -39,7 +39,7 @@ diagnostics — a wrong allow or a missed advisory is a real miss.
 | Item | Rule |
 |---|---|
 | Volume | Budget 1 open PR. Title enforcement is a warning: recent titles are plain sentences ("Add `patched` diagnostic"). |
-| Fork | None yet. Do not fork until the operator approves the first PR. |
+| Fork | `KhomDev/cargo-deny` (created 2026-11-27, operator-approved). `verify/*` branches for oss-ci only; never push to upstream. |
 | AI | The maintainer's CONTRIBUTING note is unusually blunt. Only gate small, clearly evidenced fixes; skip wide refactors and generated docs dumps. The skill footer still applies to public text. |
 | CI | `cargo fmt -- --check`, `cargo clippy --all-targets --all-features -- -D warnings`, `cargo test`. Self-check: `cargo deny --all-features --locked check`. |
 | Starting points (re-check still open) | [#919](https://github.com/EmbarkStudios/cargo-deny/issues/919) (bug: cannot ignore feature-activated dev-dependencies, 2026-11-18). [#908](https://github.com/EmbarkStudios/cargo-deny/issues/908) (wildcard diagnostic points at the wrong span). Reproduce before drafting a fix. |

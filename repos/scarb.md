@@ -1,6 +1,6 @@
 # Scarb: `software-mansion/scarb`
 
-Sources: `CONTRIBUTING.md` and `AGENTS.md` (`CLAUDE.md` is the same text) from `main`, read 2026-11-27. The KhomDev fork does not exist yet. Create it (`gh repo fork software-mansion/scarb --clone=false`) only once the operator approves the first PR.
+Sources: `CONTRIBUTING.md` and `AGENTS.md` (`CLAUDE.md` is the same text) from `main`, read 2026-11-27. The fork `KhomDev/scarb` exists (created 2026-11-27 with the operator's approval). Push only `verify/*` branches there for oss-ci; PR branches only after the operator approves the PR.
 
 ## Agent rules block
 
@@ -43,7 +43,7 @@ documentation output is critical.
 | Item | Rule |
 |---|---|
 | Volume | Budget 2 open PRs. Title and commit-subject enforcement are warnings: recent merges mix `ci:` conventional titles, `[nightly-fix]` prefixes and plain sentences. |
-| Fork | None yet. Do not fork until the operator approves the first PR. |
+| Fork | `KhomDev/scarb` (created 2026-11-27, operator-approved). `verify/*` branches for oss-ci only; never push to upstream. |
 | Typo ban | Discovery agents must not file typo-only PRs or issues. |
 | CI | Local: `cargo fmt --check`, `cargo clippy --all-targets --all-features --workspace --exclude scarb-prove --exclude scarb-verify`, targeted `cargo test -p <crate>`. Full nextest archive runs belong on oss-ci. |
 | Starting points (re-check still open and unclaimed) | [#1206](https://github.com/software-mansion/scarb/issues/1206) (`good first issue`, missing files in Scarb manifest metadata, last activity 2026-05-17). Also [#1441](https://github.com/software-mansion/scarb/issues/1441), [#1152](https://github.com/software-mansion/scarb/issues/1152), [#698](https://github.com/software-mansion/scarb/issues/698). Outsiders do land docs fixes ([#3309](https://github.com/software-mansion/scarb/pull/3309), 2026-11-10). |

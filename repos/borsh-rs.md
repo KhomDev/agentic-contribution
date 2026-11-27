@@ -1,6 +1,6 @@
 # borsh-rs: `near/borsh-rs`
 
-Sources: `README.md` and `CHANGELOG.md` from `master` (there is no CONTRIBUTING and no PR template), plus CI (`.github/workflows/rust.yml` and `.github/test.sh`), read 2026-11-27. The KhomDev fork does not exist yet. Create it (`gh repo fork near/borsh-rs --clone=false`) only once the operator approves the first PR.
+Sources: `README.md` and `CHANGELOG.md` from `master` (there is no CONTRIBUTING and no PR template), plus CI (`.github/workflows/rust.yml` and `.github/test.sh`), read 2026-11-27. The fork `KhomDev/borsh-rs` exists (created 2026-11-27 with the operator's approval). Push only `verify/*` branches there for oss-ci; PR branches only after the operator approves the PR.
 
 ## Agent rules block
 
@@ -39,7 +39,7 @@ other) projects — consistency with the spec and safe decoding are critical.
 | Item | Rule |
 |---|---|
 | Volume | Budget 2 open PRs. Title enforcement is an error (conventional commits, max 72). |
-| Fork | None yet. Do not fork until the operator approves the first PR. |
+| Fork | `KhomDev/borsh-rs` (created 2026-11-27, operator-approved). `verify/*` branches for oss-ci only; never push to upstream. |
 | CI | `.github/test.sh` is the full matrix; run a targeted `cargo test --features ...` locally. rust.yml also has exhaustive-check (`cargo check --features force_exhaustive_checks` on nightly) and manual cargo-semver-checks. |
 | Starting points | No current good-first-issue label. Outsiders landed real fixes in Nov 2026 (`feat: add BorshDeserializeBounded`, schema validation hardening, skipped-collection bounds). Discovery: docs vs decode behaviour, schema tests, bounded-decode feature flags. |
 | Releases | Do not open a version-bump PR. |

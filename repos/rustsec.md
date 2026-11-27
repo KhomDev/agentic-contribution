@@ -1,6 +1,6 @@
 # RustSec: `rustsec/rustsec`
 
-Sources: `README.md` from `main` (there is no CONTRIBUTING and no PR template), plus CI workflows (`workspace.yml`, `rustsec.yml`, `cargo-audit.yml`), read 2026-11-27. The KhomDev fork does not exist yet. Create it (`gh repo fork rustsec/rustsec --clone=false`) only once the operator approves the first PR.
+Sources: `README.md` from `main` (there is no CONTRIBUTING and no PR template), plus CI workflows (`workspace.yml`, `rustsec.yml`, `cargo-audit.yml`), read 2026-11-27. The fork `KhomDev/rustsec` exists (created 2026-11-27 with the operator's approval). Push only `verify/*` branches there for oss-ci; PR branches only after the operator approves the PR.
 
 ## Agent rules block
 
@@ -42,7 +42,7 @@ about advisories — correctness of audit results is critical.
 | Item | Rule |
 |---|---|
 | Volume | Budget 1 open PR. Title enforcement is a warning (max 80, no trailing period). |
-| Fork | None yet. Do not fork until the operator approves the first PR. |
+| Fork | `KhomDev/rustsec` (created 2026-11-27, operator-approved). `verify/*` branches for oss-ci only; never push to upstream. |
 | License | Dual MIT OR Apache-2.0. No CLA or signed-commit requirement in-repo. |
 | Starting points (re-verify) | [#740](https://github.com/rustsec/rustsec/issues/740) (configurable max file size when scanning binaries, still open, labeled good first issue, last activity 2026-01-25). [#585](https://github.com/rustsec/rustsec/issues/585) (`cargo audit` creating `./~/.cargo/advisory-db`) is likely stale — confirm before touching. Outside PRs merged the week of 2026-11-26 (trackoor, Mahan-Imanian, atouchet). |
 | Adjacent | `rustsec/actions` has open good-first-issues (#2, #3, #4) but is a different repo; out of scope unless the operator adds it. |

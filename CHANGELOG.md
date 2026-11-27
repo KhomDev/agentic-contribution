@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-27 (b): forks for the five new targets
+
+- The operator approved forks for the five new repos. `KhomDev/scarb`, `KhomDev/starknet-foundry`,
+  `KhomDev/borsh-rs`, `KhomDev/rustsec` and `KhomDev/cargo-deny` now exist and are recorded in
+  `config/repos.json` and the five cards. They're for `verify/*` oss-ci branches; filing still needs a
+  per-item operator yes.
+
 ## 2026-11-27: five new targets (Scarb, Starknet Foundry, borsh-rs, rustsec, cargo-deny)
 
 - Added `scarb` (software-mansion/scarb), `starknet-foundry` (foundry-rs/starknet-foundry),

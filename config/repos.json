@@ -1011,7 +1011,7 @@
     },
     "scarb": {
       "upstream": "software-mansion/scarb",
-      "fork": null,
+      "fork": "KhomDev/scarb",
       "default_branch": "main",
       "budget": 2,
       "process": {
@@ -1049,7 +1049,7 @@
     },
     "starknet-foundry": {
       "upstream": "foundry-rs/starknet-foundry",
-      "fork": null,
+      "fork": "KhomDev/starknet-foundry",
       "default_branch": "master",
       "budget": 2,
       "process": {
@@ -1090,7 +1090,7 @@
     },
     "borsh-rs": {
       "upstream": "near/borsh-rs",
-      "fork": null,
+      "fork": "KhomDev/borsh-rs",
       "default_branch": "master",
       "budget": 2,
       "process": {
@@ -1128,7 +1128,7 @@
     },
     "rustsec": {
       "upstream": "rustsec/rustsec",
-      "fork": null,
+      "fork": "KhomDev/rustsec",
       "default_branch": "main",
       "budget": 1,
       "process": {
@@ -1165,7 +1165,7 @@
     },
     "cargo-deny": {
       "upstream": "EmbarkStudios/cargo-deny",
-      "fork": null,
+      "fork": "KhomDev/cargo-deny",
       "default_branch": "main",
       "budget": 1,
       "process": {
