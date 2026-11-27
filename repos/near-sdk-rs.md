@@ -1,6 +1,6 @@
 # near-sdk-rs: `near/near-sdk-rs`
 
-Sources: `CONTRIBUTING.md` from `master`, read 2026-11-20. The KhomDev fork does not exist yet.
+Sources: `CONTRIBUTING.md` from `master`, read 2026-11-20. Fork: `KhomDev/near-sdk-rs` (exists since 2026-11-24).
 
 ## Agent rules block
 

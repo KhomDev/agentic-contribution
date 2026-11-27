@@ -3,7 +3,7 @@
   "author": "KhomDev",
   "ci_repo": "KhomDev/oss-ci",
   "min_rest_quota": 300,
-  "footer": "🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "footer": "\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)",
   "co_author_pattern": "^Co-Authored-By: Claude [A-Za-z0-9 .]+ <noreply@anthropic\\.com>$",
   "bot_logins": [
     "greptile-apps",
@@ -533,7 +533,7 @@
     },
     "near-sdk-rs": {
       "upstream": "near/near-sdk-rs",
-      "fork": null,
+      "fork": "KhomDev/near-sdk-rs",
       "default_branch": "master",
       "budget": 2,
       "process": {
@@ -1008,6 +1008,198 @@
       },
       "body_sections": [],
       "oss_dir": "pinocchio"
+    },
+    "scarb": {
+      "upstream": "software-mansion/scarb",
+      "fork": null,
+      "default_branch": "main",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none",
+      "sources": [
+        "CONTRIBUTING.md",
+        "AGENTS.md"
+      ],
+      "card": "repos/scarb.md",
+      "examples": {
+        "good": [
+          "Keep external links in scarb doc output",
+          "ci: lock workflow dependencies with gh actions-lock"
+        ],
+        "bad": [
+          "Keep external links in scarb doc output.",
+          "Fix typo."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "scarb"
+    },
+    "starknet-foundry": {
+      "upstream": "foundry-rs/starknet-foundry",
+      "fork": null,
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "template",
+      "changelog": "CHANGELOG.md, required by the PR checklist",
+      "sources": [
+        "CONTRIBUTING.md",
+        ".github/pull_request_template.md"
+      ],
+      "card": "repos/starknet-foundry.md",
+      "examples": {
+        "good": [
+          "fix(ci): pin native jobs to Ubuntu 24",
+          "Fail in `sncast completions` if `--json` flag is used"
+        ],
+        "bad": [
+          "Fix ci pinning.",
+          "fail in sncast completions if --json flag is used."
+        ]
+      },
+      "body_sections": [
+        "Introduced changes",
+        "Checklist"
+      ],
+      "oss_dir": "starknet-foundry"
+    },
+    "borsh-rs": {
+      "upstream": "near/borsh-rs",
+      "fork": null,
+      "default_branch": "master",
+      "budget": 2,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^(feat|fix|docs|chore|test|refactor|perf|ci|build|style|revert)(\\([a-z0-9][a-z0-9/_.-]*\\))?!?: \\S.*$",
+        "max_len": 72,
+        "enforcement": "error"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "CHANGELOG.md: user-facing changes under ## Unreleased; do not bump crate versions (release-plz)",
+      "sources": [
+        "README.md",
+        "CHANGELOG.md"
+      ],
+      "card": "repos/borsh-rs.md",
+      "examples": {
+        "good": [
+          "ci: pin powerfmt in the 1.77 job",
+          "feat: add BorshSchema for bytes types"
+        ],
+        "bad": [
+          "Update schema validation",
+          "feat add bounded decode"
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "borsh-rs"
+    },
+    "rustsec": {
+      "upstream": "rustsec/rustsec",
+      "fork": null,
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "none",
+      "sources": [
+        "README.md"
+      ],
+      "card": "repos/rustsec.md",
+      "examples": {
+        "good": [
+          "rustsec: don't panic on unaffected ranges starting at the same version",
+          "cargo-audit: say when an ignored advisory was withdrawn"
+        ],
+        "bad": [
+          "Fix cargo-audit panic.",
+          "Updated license links."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "rustsec"
+    },
+    "cargo-deny": {
+      "upstream": "EmbarkStudios/cargo-deny",
+      "fork": null,
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "CHANGELOG.md for user-facing changes (check recent maintainer PRs)",
+      "sources": [
+        "CONTRIBUTING.md",
+        "README.md"
+      ],
+      "card": "repos/cargo-deny.md",
+      "examples": {
+        "good": [
+          "Add `patched` diagnostic",
+          "Fix source replaced workspace dependencies being marked unused"
+        ],
+        "bad": [
+          "Add patched diagnostic.",
+          "Fixed unused workspace dependencies."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "cargo-deny"
     }
   }
 }

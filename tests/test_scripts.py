@@ -43,6 +43,22 @@ class Census(unittest.TestCase):
         self.assertIn("someone/else", text)
         self.assertIn("#10 (draft)", text)
 
+    def test_render_aligns_long_repo_keys(self):
+        # starknet-foundry (16) and cairo-contracts (16) overflowed the old
+        # 13-character repo column and shifted the numeric columns.
+        result = census.tally([pr("foundry-rs/starknet-foundry", 1)], CONFIG)
+        text = census.render(result)
+        header, *rows = text.splitlines()
+        width = census._repo_width(result)
+        self.assertGreaterEqual(width, len("starknet-foundry"))
+        self.assertEqual(header[width + 1:width + 5].strip(), "open")
+        long_row = next(line for line in rows if line.startswith("starknet-foundry"))
+        self.assertEqual(long_row[width + 1:width + 5].strip(), "1")
+        cairo = next(line for line in rows if line.startswith("cairo-contracts"))
+        self.assertEqual(cairo[width + 1:width + 5].strip(), "0")
+        short = next(line for line in rows if line.startswith("mpc"))
+        self.assertEqual(short[width + 1:width + 5].strip(), "0")
+
     def test_single_search_call(self):
         fake = FakeGh().add(("gh", "search", "prs"), [pr("near/docs", 5)])
         prs = census.fetch_open_prs(Gh(runner=fake), "KhomDev")
@@ -201,7 +217,10 @@ class Drift(unittest.TestCase):
         fake = FakeGh().add(("gh", "api", "rate_limit"), quota(4000)).add(("gh", "api"), "new content")
         with tempfile.TemporaryDirectory() as d:
             snap = Path(d) / "snap.json"
-            snap.write_text(json.dumps({"files": {"near/docs:CONTRIBUTING.md": "stale"}}), encoding="utf-8")
+            snap.write_text(json.dumps({"files": {
+                "near/docs:CONTRIBUTING.md": "stale",
+                "other/repo:FILE.md": "keep-me",
+            }}), encoding="utf-8")
             with mock.patch.object(rules_drift, "SNAPSHOT", snap), redirect_stdout(io.StringIO()) as out:
                 self.assertEqual(rules_drift.main(["--repo", "docs"], gh=Gh(runner=fake)), 1)
                 self.assertIn("CHANGED  near/docs:CONTRIBUTING.md", out.getvalue())
@@ -210,6 +229,39 @@ class Drift(unittest.TestCase):
             self.assertNotIn(b"\r\n", snap.read_bytes(), "snapshot must be written with LF endings")
             stored = json.loads(snap.read_text(encoding="utf-8"))
             self.assertEqual(stored["files"]["near/docs:CONTRIBUTING.md"], rules_drift.digest("new content"))
+            self.assertEqual(stored["files"]["other/repo:FILE.md"], "keep-me")
+
+    def test_full_update_drops_unlisted_sources(self):
+        fake = FakeGh().add(("gh", "api", "rate_limit"), quota(4000)).add(("gh", "api"), "body")
+        with tempfile.TemporaryDirectory() as d:
+            snap = Path(d) / "snap.json"
+            snap.write_text(json.dumps({"files": {"retired/repo:OLD.md": "abc"}}), encoding="utf-8")
+            with mock.patch.object(rules_drift, "SNAPSHOT", snap), redirect_stdout(io.StringIO()):
+                self.assertEqual(rules_drift.main(["--update"], gh=Gh(runner=fake)), 0)
+            stored = json.loads(snap.read_text(encoding="utf-8"))
+            self.assertNotIn("retired/repo:OLD.md", stored["files"])
+            expected = set()
+            for repo in CONFIG["repos"].values():
+                for path in repo["sources"]:
+                    expected.add(f"{repo['upstream']}:{path}")
+                for extra in repo.get("extra_sources", []):
+                    expected.add(f"{extra['repo']}:{extra['path']}")
+            self.assertEqual(set(stored["files"]), expected)
+            self.assertTrue(all(v == rules_drift.digest("body") for v in stored["files"].values()))
+
+    def test_update_keeps_hash_when_fetch_fails(self):
+        stale = "old-hash"
+        fake = (FakeGh()
+                .add(("gh", "api", "rate_limit"), quota(4000))
+                .add(("gh", "api"), "", 1))
+        with tempfile.TemporaryDirectory() as d:
+            snap = Path(d) / "snap.json"
+            snap.write_text(json.dumps({"files": {"near/docs:CONTRIBUTING.md": stale}}), encoding="utf-8")
+            with mock.patch.object(rules_drift, "SNAPSHOT", snap), redirect_stdout(io.StringIO()) as out:
+                self.assertEqual(rules_drift.main(["--repo", "docs", "--update"], gh=Gh(runner=fake)), 0)
+                self.assertIn("MISSING  near/docs:CONTRIBUTING.md", out.getvalue())
+            stored = json.loads(snap.read_text(encoding="utf-8"))
+            self.assertEqual(stored["files"]["near/docs:CONTRIBUTING.md"], stale)
 
 
 if __name__ == "__main__":

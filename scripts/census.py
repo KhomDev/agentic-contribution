@@ -49,12 +49,18 @@ def tally(prs: list[dict], config: dict) -> dict:
     return {"repos": list(rows.values()), "untracked": untracked}
 
 
+def _repo_width(result: dict) -> int:
+    names = [row["repo"] for row in result["repos"]]
+    return max([len("repo"), *(len(n) for n in names)], default=4)
+
+
 def render(result: dict) -> str:
-    lines = [f"{'repo':13} {'open':>4} {'budget':>6} {'free':>4}  PRs"]
+    width = _repo_width(result)
+    lines = [f"{'repo':{width}} {'open':>4} {'budget':>6} {'free':>4}  PRs"]
     for row in sorted(result["repos"], key=lambda r: (-r["free"], r["repo"])):
         prs = ", ".join(f"#{p['number']}{' (draft)' if p['draft'] else ''}" for p in row["prs"]) or "-"
         flag = "  OVER BUDGET" if row["over"] else ""
-        lines.append(f"{row['repo']:13} {row['open']:>4} {row['budget']:>6} {row['free']:>4}  {prs}{flag}")
+        lines.append(f"{row['repo']:{width}} {row['open']:>4} {row['budget']:>6} {row['free']:>4}  {prs}{flag}")
     if result["untracked"]:
         names = sorted({p["repository"]["nameWithOwner"] for p in result["untracked"]})
         lines.append(f"open PRs in repos outside the program: {', '.join(names)}")

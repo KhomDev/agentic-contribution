@@ -84,6 +84,11 @@ def main(argv: list[str] | None = None, gh: Gh | None = None) -> int:
 
     if args.update:
         stored["files"].update({k: v for k, v in current.items() if v is not None})
+        # A full update (no --repo) drops sources no longer listed in config.
+        # Failed fetches stay: their digest is None, so the previous hash is kept.
+        if not args.repo:
+            for key in [k for k in stored["files"] if k not in current]:
+                del stored["files"][key]
         stored["checked"] = dt.date.today().isoformat()
         SNAPSHOT.write_text(json.dumps(stored, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
         print(f"snapshot written: {SNAPSHOT}")

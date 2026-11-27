@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-11-27: five new targets (Scarb, Starknet Foundry, borsh-rs, rustsec, cargo-deny)
+
+- Added `scarb` (software-mansion/scarb), `starknet-foundry` (foundry-rs/starknet-foundry),
+  `borsh-rs` (near/borsh-rs), `rustsec` (rustsec/rustsec) and `cargo-deny`
+  (EmbarkStudios/cargo-deny): repo cards, `config/repos.json` entries, program table.
+  KhomDev forks do not exist yet and must not be created until the operator approves the
+  first PR. Scarb and Starknet Foundry reject typo-only PRs. cargo-deny's CONTRIBUTING
+  says obviously AI-written PRs are likely to be closed unless the change is small.
+- `tests/test_config.py` no longer hard-codes the repo count (it had drifted once already).
+  It now checks that the SKILL.md description's "N repos" matches `len(config["repos"])`.
+- Recorded the existing `KhomDev/near-sdk-rs` fork in `config/repos.json` and the
+  near-sdk-rs card (the fork has existed since 2026-11-24).
+
+- `census.py` sizes the repo column to the longest key. The old 13-character width
+  overflowed for `cairo-contracts`, `typescript-sdk` and `starknet-foundry`.
+- `rules_drift.py --update` (without `--repo`) now drops snapshot keys that are no
+  longer listed in config. A failed fetch still keeps the previous hash. Tests cover
+  alignment, snapshot completeness, prune, keep-on-`--repo`, and keep-on-fetch-failure.
+
+
 ## 2026-11-24: v2.1, three Solana tooling repos
 
 - Added `litesvm` (LiteSVM/litesvm), `mollusk` (anza-xyz/mollusk) and `pinocchio`

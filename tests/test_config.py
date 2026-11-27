@@ -1,3 +1,4 @@
+import json
 import re
 import unittest
 
@@ -17,8 +18,18 @@ class ConfigShape(unittest.TestCase):
     def setUpClass(cls):
         cls.config = load_config(local=EXAMPLE_LOCAL_PATH)
 
-    def test_repo_count(self):
-        self.assertEqual(len(self.config["repos"]), 24)
+    def test_repo_count_is_consistent(self):
+        # Do not hard-code the count; it grows when targets are added.
+        repos = self.config["repos"]
+        self.assertGreaterEqual(len(repos), 24)
+        cards = [r["card"] for r in repos.values()]
+        self.assertEqual(len(cards), len(set(cards)), "duplicate card paths")
+
+    def test_skill_description_repo_count(self):
+        text = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        match = re.search(r"across (\d+) repos", text)
+        self.assertIsNotNone(match, "SKILL.md description should say 'across N repos'")
+        self.assertEqual(int(match.group(1)), len(self.config["repos"]))
 
     def test_every_repo_has_required_fields(self):
         for key, repo in self.config["repos"].items():
@@ -64,6 +75,22 @@ class ConfigShape(unittest.TestCase):
         for p in self.config["public_text"]["error_patterns"] + self.config["public_text"]["warn_patterns"]:
             re.compile(p)
         re.compile(self.config["co_author_pattern"])
+
+    def test_snapshot_covers_all_sources(self):
+        # Adding a repo (or a source) without rules_drift.py --update would
+        # leave the weekly drift check blind to that file.
+        snap = json.loads((SKILL_ROOT / "config" / "rules-snapshot.json").read_text(encoding="utf-8"))
+        missing = []
+        for repo in self.config["repos"].values():
+            for path in repo["sources"]:
+                key = f"{repo['upstream']}:{path}"
+                if key not in snap["files"]:
+                    missing.append(key)
+            for extra in repo.get("extra_sources", []):
+                key = f"{extra['repo']}:{extra['path']}"
+                if key not in snap["files"]:
+                    missing.append(key)
+        self.assertEqual(missing, [], "run python scripts/rules_drift.py --update after adding sources")
 
 
 class TitleExamples(unittest.TestCase):
