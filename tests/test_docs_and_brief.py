@@ -68,7 +68,7 @@ class Cards(unittest.TestCase):
         text = (SKILL_ROOT / "repos" / "x402.md").read_text(encoding="utf-8")
         first = brief.text_blocks(text, "Agent rules block")[0]
         self.assertTrue(first.startswith("You are contributing to x402, an open protocol for internet-native payments."))
-        self.assertEqual(len(re.findall(r"^\d+\. [A-Z]", first, re.MULTILINE)), 9)
+        self.assertEqual(len(re.findall(r"^\d+\. [A-Z]", first, re.MULTILINE)), 10)
 
     def test_rules_blocks_are_numbered(self):
         for key, repo in CONFIG["repos"].items():
