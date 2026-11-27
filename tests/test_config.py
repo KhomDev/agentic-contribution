@@ -74,7 +74,7 @@ class ConfigShape(unittest.TestCase):
     def test_patterns_compile(self):
         for p in self.config["public_text"]["error_patterns"] + self.config["public_text"]["warn_patterns"]:
             re.compile(p)
-        re.compile(self.config["co_author_pattern"])
+        self.assertEqual(self.config["authored_by_line"], "Authored by KhomDev with AI assistance.")
 
     def test_krates_target(self):
         repo = self.config["repos"]["krates"]

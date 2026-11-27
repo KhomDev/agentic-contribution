@@ -17,8 +17,9 @@ contracts inherit it; storage layout and ABI compatibility are critical.
    tooling and conventions.
 
 3. COMMITS AND PRS: conventional commits `type(scope): summary`; sign every
-   commit. NEVER add a Co-Authored-By trailer for an AI assistant — the repo
-   forbids it. The author is accountable under their own name.
+   commit. NEVER add a Co-Authored-By trailer or the usual
+   'Authored by KhomDev with AI assistance.' line — the repo forbids AI
+   commit trailers. The author is accountable under their own name.
 
 4. STORAGE: prefix component storage members with the component name; preserve
    deployed field names and types; assess storage compatibility before changing
@@ -46,7 +47,7 @@ contracts inherit it; storage layout and ABI compatibility are critical.
 | PR title | Conventional commits style; recent maintainer merges are often plain, so title enforcement is a warning |
 | Issue | Issue-first: the PR links the maintainer-agreed issue |
 | Signing | Required by CONTRIBUTING |
-| Commit trailer | **Forbidden**: no `Co-Authored-By` for an AI assistant (config `commit_trailer: "none"`). The orchestrator must not add its usual trailer here |
+| Commit trailer | **Forbidden**: no `Co-Authored-By` and no `Authored by KhomDev with AI assistance.` (config `commit_trailer: "none"`). The orchestrator must not add either here |
 | AI disclosure | Allowed and disclosed in the PR body by the footer; low-effort output is closed |
 | CI | `scarb fmt --check --workspace`; `scarb lint --workspace --test --deny-warnings`; `snforge test --workspace --features fuzzing --fuzzer-runs 200 --skip falcon_512`; coverage via `snforge test --workspace --coverage` |
 | Changelog | `CHANGELOG.md` under `## Unreleased` |

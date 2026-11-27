@@ -4,7 +4,7 @@
   "ci_repo": "KhomDev/oss-ci",
   "min_rest_quota": 300,
   "footer": "🤖 Generated with [Claude Code](https://claude.com/claude-code)",
-  "co_author_pattern": "^Co-Authored-By: Claude [A-Za-z0-9 .]+ <noreply@anthropic\\.com>$",
+  "authored_by_line": "Authored by KhomDev with AI assistance.",
   "bot_logins": [
     "greptile-apps",
     "coderabbitai",

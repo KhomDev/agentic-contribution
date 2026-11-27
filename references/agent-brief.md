@@ -36,8 +36,8 @@ YOUR LIMITS (never cross them)
      git config core.autocrlf false
      git config core.longpaths true
    Do not sign; the orchestrator re-signs. End every commit message with
-     Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
-   (the orchestrator replaces it with its own trailer when it re-signs).
+     Authored by KhomDev with AI assistance.
+   Do not add a Co-Authored-By trailer for an AI assistant.
 3. Commit messages and PR titles follow the repo rules block below EXACTLY
    (format, types, case, length). Body says why, not what.
 4. Host: Windows, about 1 GB free RAM, other agents running. Never build or

@@ -7,7 +7,8 @@ from _common import EXAMPLE_LOCAL_PATH, load_config
 
 CONFIG = load_config(local=EXAMPLE_LOCAL_PATH)
 FOOTER = CONFIG["footer"]
-TRAILER = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+TRAILER = "Authored by KhomDev with AI assistance."
+OLD_TRAILER = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 
 def errors(findings):
@@ -158,16 +159,24 @@ class Commits(unittest.TestCase):
 
     def test_missing_trailer(self):
         f = pr_lint.lint_commit("fix(near): x\n\nwhy\n", CONFIG["repos"]["x402"], CONFIG, "c")
-        self.assertTrue(any("trailer" in x.message for x in errors(f)))
+        self.assertTrue(any("Authored by KhomDev with AI assistance." in x.message for x in errors(f)))
 
-    def test_two_claude_trailers(self):
-        m = self.msg(extra="Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>")
+    def test_two_authored_lines(self):
+        m = self.msg(extra=TRAILER)
         f = pr_lint.lint_commit(m, CONFIG["repos"]["x402"], CONFIG, "c")
         self.assertTrue(any("exactly one" in x.message for x in errors(f)))
 
-    def test_fable_trailer_accepted(self):
+    def test_claude_coauthor_rejected(self):
+        m = self.msg(extra=OLD_TRAILER)
+        f = pr_lint.lint_commit(m, CONFIG["repos"]["x402"], CONFIG, "c")
+        self.assertTrue(any("Co-Authored-By" in x.message for x in errors(f)))
+
+    def test_old_claude_trailer_alone_rejected(self):
         m = "fix(near): x\n\nwhy\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>\n"
-        self.assertEqual(errors(pr_lint.lint_commit(m, CONFIG["repos"]["x402"], CONFIG, "c")), [])
+        f = pr_lint.lint_commit(m, CONFIG["repos"]["x402"], CONFIG, "c")
+        msgs = [x.message for x in errors(f)]
+        self.assertTrue(any("Authored by KhomDev with AI assistance." in x for x in msgs))
+        self.assertTrue(any("Co-Authored-By" in x for x in msgs))
 
     def test_second_line_must_be_blank(self):
         f = pr_lint.lint_commit(f"fix(near): x\nbody\n{TRAILER}\n", CONFIG["repos"]["x402"], CONFIG, "c")
@@ -177,8 +186,11 @@ class Commits(unittest.TestCase):
         repo = CONFIG["repos"]["cairo-contracts"]
         clean = "fix(vesting): reject zero-duration schedules\n\nwhy\n"
         self.assertEqual(errors(pr_lint.lint_commit(clean, repo, CONFIG, "c")), [])
-        with_trailer = clean + f"\n{TRAILER}\n"
+        with_trailer = clean + f"\n{OLD_TRAILER}\n"
         f = pr_lint.lint_commit(with_trailer, repo, CONFIG, "c")
+        self.assertTrue(any("forbids" in x.message for x in errors(f)))
+        with_authored = clean + f"\n{TRAILER}\n"
+        f = pr_lint.lint_commit(with_authored, repo, CONFIG, "c")
         self.assertTrue(any("forbids" in x.message for x in errors(f)))
 
     def test_subject_format_enforcement(self):

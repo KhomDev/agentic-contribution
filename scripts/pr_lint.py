@@ -119,18 +119,24 @@ def lint_commit(message: str, repo: dict, config: dict, where: str) -> list[Find
         long_lines = [i + 1 for i, ln in enumerate(lines[2:], start=2) if len(ln) > limit]
         if long_lines:
             out.append(Finding("error", where, f"body lines over {limit} chars (commitlint): {long_lines}"))
+    author_line = config["authored_by_line"]
     trailers = [ln for ln in lines if ln.lower().startswith("co-authored-by:") and "anthropic.com" in ln.lower()]
+    authored = [ln for ln in lines if ln.strip() == author_line]
     if repo.get("commit_trailer", "required") == "none":
         # Some upstreams forbid AI co-author trailers outright (OZ Cairo, CONTRIBUTING.md).
         if trailers:
             out.append(Finding("error", where, "this repo forbids Claude co-author trailers; remove it"))
+        if authored:
+            out.append(Finding("error", where, f"this repo forbids the {author_line!r} line; omit it"))
     else:
-        good = [ln for ln in trailers if re.match(config["co_author_pattern"], ln.strip())]
-        if not good:
-            out.append(Finding("error", where, "missing 'Co-Authored-By: Claude <model> <noreply@anthropic.com>' trailer"))
-        if len(trailers) > 1:
-            out.append(Finding("error", where, f"{len(trailers)} Claude co-author trailers; keep exactly one (the orchestrator's)"))
-    body_text = "\n".join(ln for ln in lines if ln not in trailers)
+        if trailers:
+            out.append(Finding("error", where, f"remove the Claude Co-Authored-By trailer; use {author_line!r} instead"))
+        if not authored:
+            out.append(Finding("error", where, f"missing {author_line!r}"))
+        if len(authored) > 1:
+            out.append(Finding("error", where, f"{len(authored)} {author_line!r} lines; keep exactly one"))
+    skip = set(trailers + authored)
+    body_text = "\n".join(ln for ln in lines if ln not in skip)
     _scan_terms(body_text, where, config["public_text"], out)
     return out
 

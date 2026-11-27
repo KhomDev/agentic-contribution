@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-28: commit attribution line
+
+- Commit messages now end with `Authored by KhomDev with AI assistance.` instead of a
+  `Co-Authored-By: Claude <model>` trailer. `pr_lint.py` requires the new line (and rejects a
+  leftover Claude Co-Authored-By trailer) except when a repo sets `commit_trailer: "none"`, which
+  still forbids both. Agent brief and signing notes match.
+
 ## 2026-11-27 (c): krates
 
 - Added `krates` (EmbarkStudios/krates): card, `config/repos.json` entry and the program table. It's the crate-graph library under cargo-deny. cargo-deny#919's root cause is in `Krates::krates_filtered`. The operator approved the fork, and `KhomDev/krates` exists for `verify/*` oss-ci branches. Filing still needs a per-item operator yes.
