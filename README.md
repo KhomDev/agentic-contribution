@@ -10,7 +10,7 @@ everything an agent claims and prepares each public action as a gate packet. **T
 approves each one with a click in the chat. Nothing appears on GitHub under the operator's name
 without that click.
 
-It's written for one contributor (KhomDev) and the repositories listed in `config/repos.json` (currently 29), but the engine is generic. Swap the
+It's written for one contributor (KhomDev) and the repositories listed in `config/repos.json` (currently 30), but the engine is generic. Swap the
 repo cards and `config/repos.json` for your own.
 
 ## Why it's built this way

@@ -3,6 +3,8 @@
   "files": {
     "EmbarkStudios/cargo-deny:CONTRIBUTING.md": "b411d5bad0237fa712e759796e9fc98b5463845775617356cb2e6844eb0d5aa4",
     "EmbarkStudios/cargo-deny:README.md": "444efde034b8e4a854b964d81f7a1a3ccfa2bfaa16f3b1524d590c4d521c76d8",
+    "EmbarkStudios/krates:CONTRIBUTING.md": "2bd3692de4c824c7dcb8ba1e8f18639818156d4a0529afa56ef6e8f2efaa5dd1",
+    "EmbarkStudios/krates:README.md": "497e20a83a5d368907c944aaf43e3e1d0330aed385a49526092c5b01a4795ab6",
     "LiteSVM/litesvm:.github/workflows/ci.yml": "16a31b443c9be4792570c4c0c9cd3f59b13acfeed92fc2597dc839fde7369141",
     "LiteSVM/litesvm:CHANGELOG.md": "6b49039f7dc82ab0d08bde3cd7d0f7333846653a4397b375e471d46d20f446c4",
     "LiteSVM/litesvm:README.md": "baaca94383648d1a401cd04e18bc288547ed6640cacb240985084ad36f5404d1",

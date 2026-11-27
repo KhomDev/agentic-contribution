@@ -76,6 +76,15 @@ class ConfigShape(unittest.TestCase):
             re.compile(p)
         re.compile(self.config["co_author_pattern"])
 
+    def test_krates_target(self):
+        repo = self.config["repos"]["krates"]
+        self.assertEqual(repo["upstream"], "EmbarkStudios/krates")
+        self.assertEqual(repo["fork"], "KhomDev/krates")
+        self.assertEqual(repo["oss_dir"], "krates")
+        card = (SKILL_ROOT / repo["card"]).read_text(encoding="utf-8")
+        self.assertIn("krates_filtered", card)
+        self.assertIn("KhomDev/krates", card)
+
     def test_snapshot_covers_all_sources(self):
         # Adding a repo (or a source) without rules_drift.py --update would
         # leave the weekly drift check blind to that file.

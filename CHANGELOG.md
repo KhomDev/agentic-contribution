@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-27 (c): krates
+
+- Added `krates` (EmbarkStudios/krates): card, `config/repos.json` entry and the program table. It's the crate-graph library under cargo-deny. cargo-deny#919's root cause is in `Krates::krates_filtered`. The operator approved the fork, and `KhomDev/krates` exists for `verify/*` oss-ci branches. Filing still needs a per-item operator yes.
+
 ## 2026-11-27 (b): forks for the five new targets
 
 - The operator approved forks for the five new repos. `KhomDev/scarb`, `KhomDev/starknet-foundry`,

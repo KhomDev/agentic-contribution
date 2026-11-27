@@ -3,7 +3,7 @@
   "author": "KhomDev",
   "ci_repo": "KhomDev/oss-ci",
   "min_rest_quota": 300,
-  "footer": "\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)",
+  "footer": "🤖 Generated with [Claude Code](https://claude.com/claude-code)",
   "co_author_pattern": "^Co-Authored-By: Claude [A-Za-z0-9 .]+ <noreply@anthropic\\.com>$",
   "bot_logins": [
     "greptile-apps",
@@ -1200,6 +1200,45 @@
       },
       "body_sections": [],
       "oss_dir": "cargo-deny"
+    },
+    "krates": {
+      "upstream": "EmbarkStudios/krates",
+      "fork": "KhomDev/krates",
+      "default_branch": "main",
+      "budget": 1,
+      "process": {
+        "issue_first": false,
+        "draft_first": false,
+        "cla": false,
+        "signed_commits": false
+      },
+      "title": {
+        "regex": "^\\S.*[^.]$",
+        "max_len": 80,
+        "enforcement": "warn"
+      },
+      "commit_subject_enforcement": "warn",
+      "ai_disclosure": "none",
+      "pr_body": "prose",
+      "changelog": "CHANGELOG.md [Unreleased] uses \"[PR#n](link) resolved [#n](link) by ...\"; outside PRs sometimes add it, otherwise the maintainer does in \"Update CHANGELOG\"",
+      "sources": [
+        "CONTRIBUTING.md",
+        "README.md"
+      ],
+      "card": "repos/krates.md",
+      "examples": {
+        "good": [
+          "Fix `PkgSpec` matching",
+          "Allow compatible graph dependency versions",
+          "Fix weak feature chaining"
+        ],
+        "bad": [
+          "Fix PkgSpec matching.",
+          "Fixed weak feature chaining."
+        ]
+      },
+      "body_sections": [],
+      "oss_dir": "krates"
     }
   }
 }
